@@ -1,0 +1,33 @@
+consumer:
+ -  connection: defaultConnectionFactory
+    address: 47.100.235.125
+    port: 5672
+    username: admin
+    password: admin
+    consumers:
+          - class: com.igniubi.demo.rabbitmq.consumer.LogConsumer
+            topic: igniubi.log
+
+ -  connection: userConnectionFactory
+    consumers:
+          - class: com.igniubi.demo.rabbitmq.consumer.userConsumer
+            topic: igniubi.user
+
+
+
+producer:
+    -   connection: defaultConnectionFactory
+        address: 47.100.235.125
+        port: 5672
+        username: admin
+        password: admin
+        producers:
+                  - bean: demoProducer
+
+    -   connection: userConnectionFactory
+        address: 47.100.235.125
+        port: 5672
+        username: admin
+        password: admin
+        producers:
+                  - bean: userProducer
