@@ -30,7 +30,7 @@ public class RedisUtil {
     }
 
 
-    public String get(RedisKeyBuilder keyBuilder) throws Exception  {
+    public String get(RedisKeyBuilder keyBuilder)   {
         String result = null;
         try {
             result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).get();
@@ -40,7 +40,7 @@ public class RedisUtil {
         return result;
     }
 
-    public <T>  List<T> getList(RedisKeyBuilder keyBuilder, Class<T> clazz) throws Exception  {
+    public <T>  List<T> getList(RedisKeyBuilder keyBuilder, Class<T> clazz)   {
         try {
             String result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).get();
             return JSON.parseArray(result, clazz);
@@ -50,7 +50,7 @@ public class RedisUtil {
         return null;
     }
 
-    public void set(RedisKeyBuilder keyBuilder, Object value, long timeout, TimeUnit unit) throws Exception {
+    public void set(RedisKeyBuilder keyBuilder, Object value, long timeout, TimeUnit unit)  {
         try {
             stringRedisTemplate.boundValueOps(keyBuilder.getKey()).set(JSON.toJSONString(value),timeout,unit);
         } catch (Exception e){
@@ -58,7 +58,7 @@ public class RedisUtil {
         }
     }
 
-    public Long increament(RedisKeyBuilder keyBuilder, long value, long timeout, TimeUnit unit) throws Exception {
+    public Long increament(RedisKeyBuilder keyBuilder, long value, long timeout, TimeUnit unit)  {
         Long result = null;
         try {
             result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).increment(value);
