@@ -1,6 +1,7 @@
 package com.igniubi.redis.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.lettuce.core.RedisClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +31,16 @@ public class RedisUtil {
     }
 
 
-    public String get(RedisKeyBuilder keyBuilder)   {
-        String result = null;
+    public <T>T get(RedisKeyBuilder keyBuilder, Class<T> tClass)   {
+        String result;
+        T t = null;
         try {
             result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).get();
+            t = JSONObject.parseObject(result, tClass);
         } catch (Exception e){
             logger.warn("RedisUtil get error, key is {}, e is {}",keyBuilder.getKey(), e);
         }
-        return result;
+        return t;
     }
 
     public <T>  List<T> getList(RedisKeyBuilder keyBuilder, Class<T> clazz)   {
