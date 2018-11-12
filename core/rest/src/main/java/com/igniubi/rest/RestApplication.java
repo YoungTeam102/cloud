@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableDiscoveryClient
+@ComponentScan(basePackages = "com.igniubi.rest")
 public class RestApplication {
 
     public static void main(String[] args) {
