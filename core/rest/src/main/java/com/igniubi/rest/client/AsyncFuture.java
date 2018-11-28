@@ -2,6 +2,8 @@ package com.igniubi.rest.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +17,7 @@ public class AsyncFuture<T> {
 
 
     private final Future<T> future;
+    private final ListenableFuture<ResponseEntity<T>> listenableFuture;
     private final String serviceName;
     private final int timeOut = 5;
 
@@ -24,6 +27,13 @@ public class AsyncFuture<T> {
     public AsyncFuture(Future<T> future, String serviceName) {
         this.future = future;
         this.serviceName = serviceName;
+        this.listenableFuture=null;
+    }
+
+    public AsyncFuture(ListenableFuture<ResponseEntity<T>> listenableFuture, String serviceName) {
+        this.listenableFuture = listenableFuture;
+        this.serviceName = serviceName;
+        this.future = null;
     }
 
 
@@ -65,8 +75,12 @@ public class AsyncFuture<T> {
     private T innerGet(long waitingSeconds,TimeUnit unit) {
         T t = null;
         try {
-            t = this.future.get(waitingSeconds, unit);
-            
+            if(this.future == null){
+                t = this.listenableFuture.get(waitingSeconds ,unit).getBody();
+            }else{
+                t = this.future.get(waitingSeconds, unit);
+            }
+
             //避免LogUtils.shotter  先执行
         }catch(TimeoutException te){//增加超时异常
         	log.warn("call service: {} failed:{} with TimeoutException.", serviceName,te);

@@ -1,7 +1,9 @@
 package com.igniubi.rest.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.concurrent.ListenableFuture;
 
 @Component
 public class RestServiceCaller implements IRestClient{
@@ -23,6 +25,7 @@ public class RestServiceCaller implements IRestClient{
 
     @Override
     public <T> AsyncFuture<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
-        return null;
+        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncPost(serviceName,serviceUrl , request , responseType);
+        return new AsyncFuture<T>(t, serviceName+serviceUrl);
     }
 }

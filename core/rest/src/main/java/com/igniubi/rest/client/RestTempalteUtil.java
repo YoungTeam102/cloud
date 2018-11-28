@@ -3,18 +3,18 @@ package com.igniubi.rest.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -28,6 +28,9 @@ public class RestTempalteUtil {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    AsyncRestTemplate asyncRestTemplate;
+
     public  <T> T post(String url, Object request, Class<T> responseType){
         MultiValueMap<String, String> headers = setupPostHeaders(request);
         HttpEntity<Object> requestEntity = new HttpEntity<>(request, headers);
@@ -36,14 +39,14 @@ public class RestTempalteUtil {
         return t;
     }
 
-//    public <T> AsyncFuture<T> asyncPost(String serviceName, String serviceUrl, Object request, Class<T> responseType){
-//        String url = serviceName + serviceUrl;
-//        MultiValueMap<String, String> headers = setupPostHeaders(request);
-//        HttpEntity<Object> requestEntity = new HttpEntity<>(request, headers);
-//        T t=  restTemplate.postForObject(url , requestEntity ,responseType);
-//
-//        return t;
-//    }
+    public <T> ListenableFuture<ResponseEntity<T>>  asyncPost(String serviceName, String serviceUrl, Object request, Class<T> responseType){
+        String url = serviceName + serviceUrl;
+        MultiValueMap<String, String> headers = setupPostHeaders(request);
+        HttpEntity<Object> requestEntity = new HttpEntity<>(request, headers);
+        ListenableFuture<ResponseEntity<T>> t=  asyncRestTemplate.postForEntity(url , requestEntity ,responseType, new HashMap<>());
+
+        return t;
+    }
 
 
     public <T> T get(String path, Object request, Class<T> responseType)   {
