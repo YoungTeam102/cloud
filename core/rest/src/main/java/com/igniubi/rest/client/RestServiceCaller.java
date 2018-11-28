@@ -14,7 +14,7 @@ public class RestServiceCaller implements IRestClient{
     RestTempalteUtil tempalteUtil;
 
     @Override
-    public <T> T call(String serviceName, String serviceUrl, Object request, Class<T> responseType) throws ExecutionException, InterruptedException {
+    public <T> T call(String serviceName, String serviceUrl, Object request, Class<T> responseType){
         String url = serviceName + serviceUrl;
         ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncPost(serviceName,serviceUrl , request , responseType);
         return new AsyncFuture<T>(t, serviceName+serviceUrl).get();
