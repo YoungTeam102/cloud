@@ -1,0 +1,19 @@
+# port
+server:
+  port: 17601
+
+spring:
+  application:
+    # 本服务注册到注册到服务器的名称, 这个名称就是后面调用服务时的服务标识符
+    name: zipkin
+eureka:
+  client:
+    serviceUrl:
+      # 服务器注册/获取服务器的zone
+      defaultZone: http://127.0.0.1:8762/eureka/
+  instance:
+    prefer-ip-address: true
+
+spring:
+  zipkin:
+    enabled: false
