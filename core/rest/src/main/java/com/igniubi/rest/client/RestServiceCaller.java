@@ -8,35 +8,35 @@ import org.springframework.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Component
-public class RestServiceCaller implements IRestClient{
+public class RestServiceCaller implements IRestClient {
 
     @Autowired
     RestTempalteUtil tempalteUtil;
 
     @Override
-    public <T> T call(String serviceName, String serviceUrl, Object request, Class<T> responseType){
+    public <T> T call(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
-        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncPost(serviceName,serviceUrl , request , responseType);
-        return new AsyncFuture<T>(t, serviceName+serviceUrl).get();
+        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncPost(serviceName, serviceUrl, request, responseType);
+        return new AsyncFuture<T>(t, serviceName + serviceUrl).get();
     }
 
     @Override
     public <T> T get(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
-        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncGet(url , request , responseType);
-        return new AsyncFuture<T>(t, serviceName+serviceUrl).get();
+        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncGet(url, request, responseType);
+        return new AsyncFuture<T>(t, serviceName + serviceUrl).get();
     }
 
     @Override
     public <T> AsyncFuture<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
-        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncPost(serviceName,serviceUrl , request , responseType);
-        return new AsyncFuture<T>(t, serviceName+serviceUrl);
+        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncPost(serviceName, serviceUrl, request, responseType);
+        return new AsyncFuture<T>(t, serviceName + serviceUrl);
     }
 
     @Override
     public <T> AsyncFuture<T> asyncGet(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
-        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncGet(url , request , responseType);
-        return new AsyncFuture<T>(t, serviceName+serviceUrl);
+        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncGet(url, request, responseType);
+        return new AsyncFuture<T>(t, serviceName + serviceUrl);
     }
 }

@@ -31,25 +31,25 @@ public class RestTempalteUtil {
     @Autowired
     AsyncRestTemplate asyncRestTemplate;
 
-    public  <T> T post(String url, Object request, Class<T> responseType){
+    public <T> T post(String url, Object request, Class<T> responseType) {
         MultiValueMap<String, String> headers = setupPostHeaders(request);
         HttpEntity<Object> requestEntity = new HttpEntity<>(request, headers);
-        T t=  restTemplate.postForObject(url , requestEntity ,responseType);
+        T t = restTemplate.postForObject(url, requestEntity, responseType);
 
         return t;
     }
 
-    public <T> ListenableFuture<ResponseEntity<T>>  asyncPost(String serviceName, String serviceUrl, Object request, Class<T> responseType){
+    public <T> ListenableFuture<ResponseEntity<T>> asyncPost(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         MultiValueMap<String, String> headers = setupPostHeaders(request);
         HttpEntity<Object> requestEntity = new HttpEntity<>(request, headers);
-        ListenableFuture<ResponseEntity<T>> t=  asyncRestTemplate.postForEntity(url , requestEntity ,responseType, new HashMap<>());
+        ListenableFuture<ResponseEntity<T>> t = asyncRestTemplate.postForEntity(url, requestEntity, responseType, new HashMap<>());
 
         return t;
     }
 
 
-    public <T> T get(String path, Object request, Class<T> responseType)   {
+    public <T> T get(String path, Object request, Class<T> responseType) {
 
         log.debug("begin to do http get. path:{}, request params:{}", path, request);
 
@@ -75,12 +75,12 @@ public class RestTempalteUtil {
         HttpEntity<T> response = restTemplate.exchange(getURI, HttpMethod.GET, entity, responseType);
 
         if (log.isDebugEnabled()) {
-            log.debug("end to do http get. path:{}, request params:{}. response body: {}", path, request,response.getBody());
+            log.debug("end to do http get. path:{}, request params:{}. response body: {}", path, request, response.getBody());
         }
         return response.getBody();
     }
 
-    public <T> ListenableFuture<ResponseEntity<T>> asyncGet(String path, Object request, Class<T> responseType)   {
+    public <T> ListenableFuture<ResponseEntity<T>> asyncGet(String path, Object request, Class<T> responseType) {
 
         log.debug("begin to do http get. path:{}, request params:{}", path, request);
 
@@ -103,15 +103,17 @@ public class RestTempalteUtil {
         }
         final URI getURI = builder.build().encode().toUri();
 
-        ListenableFuture<ResponseEntity<T>> t= asyncRestTemplate.exchange(getURI, HttpMethod.GET, entity, responseType);
+        ListenableFuture<ResponseEntity<T>> t = asyncRestTemplate.exchange(getURI, HttpMethod.GET, entity, responseType);
 
         if (log.isDebugEnabled()) {
-            log.debug("end to do http get. path:{}, request params:{}. response body: {}", path, request,t);
+            log.debug("end to do http get. path:{}, request params:{}. response body: {}", path, request, t);
         }
         return t;
     }
+
     /**
-     *  设置post的请求头。 如果request是MultiValueMap，则使用form方式提交，并且设置content-type为utf8
+     * 设置post的请求头。 如果request是MultiValueMap，则使用form方式提交，并且设置content-type为utf8
+     *
      * @param request 请求
      * @return post头
      */
@@ -119,8 +121,8 @@ public class RestTempalteUtil {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap();
         if (request != null && MultiValueMap.class.isAssignableFrom(request.getClass())) {
             headers.set("Content-Type", FORM_WITH_UTF8);
-        }else {
-                headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        } else {
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         }
         return headers;
     }

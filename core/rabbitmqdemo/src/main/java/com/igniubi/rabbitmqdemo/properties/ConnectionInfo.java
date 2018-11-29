@@ -3,8 +3,6 @@ package com.igniubi.rabbitmqdemo.properties;
 import lombok.Data;
 
 /**
- *
- *
  * rabbitmq connection info
  */
 @Data
@@ -20,18 +18,18 @@ public class ConnectionInfo {
     String vhost;
 
 
-    public ConnectionInfo(String factoryId, int heartbeat,String templateId) {
-        this.factoryId=factoryId;
+    public ConnectionInfo(String factoryId, int heartbeat, String templateId) {
+        this.factoryId = factoryId;
         this.heartbeat = heartbeat;
         this.templateId = templateId;
     }
 
     public ConnectionInfo(String factoryId, int heartbeat) {
-        this.factoryId=factoryId;
+        this.factoryId = factoryId;
         this.heartbeat = heartbeat;
     }
 
-    public ConnectionInfo(int heartbeat, String beanId, String factoryId, String templateId, String address, String port, String username, String password,String vhost) {
+    public ConnectionInfo(int heartbeat, String beanId, String factoryId, String templateId, String address, String port, String username, String password, String vhost) {
         this.heartbeat = heartbeat;
         this.beanId = beanId;
         this.factoryId = factoryId;

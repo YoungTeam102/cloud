@@ -9,12 +9,12 @@ public class RedisKeyBuilder {
     /**
      * redis的key
      */
-    private StringBuilder key=new StringBuilder();
+    private StringBuilder key = new StringBuilder();
 
     /**
      * redis key的分组模板
      */
-    private StringBuilder keyTemplate=new StringBuilder();
+    private StringBuilder keyTemplate = new StringBuilder();
 
     /**
      * 防止getKey时重复的new String；
@@ -27,41 +27,41 @@ public class RedisKeyBuilder {
     private String innerKeyTemplate;
 
 
-    public static final String SEPARATOR_MH=":";
+    public static final String SEPARATOR_MH = ":";
 
-    public static final String SEPARATOR_JH="#";
+    public static final String SEPARATOR_JH = "#";
 
-    private static final String PLACEHOLDER="{}";
+    private static final String PLACEHOLDER = "{}";
 
     public RedisKeyBuilder() {
     }
 
-    public static RedisKeyBuilder newInstance(){
+    public static RedisKeyBuilder newInstance() {
         return new RedisKeyBuilder();
     }
 
     public RedisKeyBuilder appendFixed(Object fixedArg) {
         key.append(fixedArg);
         keyTemplate.append(fixedArg);
-        return  this;
+        return this;
     }
 
     public RedisKeyBuilder appendVar(Object varArg) {
         key.append(varArg);
         keyTemplate.append(PLACEHOLDER);
-        return  this;
-    }
-
-    public RedisKeyBuilder appendVarWithMH(Object... vars){
-        appendVarWithSeparator(SEPARATOR_MH,vars);
         return this;
     }
 
-    public RedisKeyBuilder appendVarWithSeparator(String separator,Object... vars){
-        if(vars.length==0){
+    public RedisKeyBuilder appendVarWithMH(Object... vars) {
+        appendVarWithSeparator(SEPARATOR_MH, vars);
+        return this;
+    }
+
+    public RedisKeyBuilder appendVarWithSeparator(String separator, Object... vars) {
+        if (vars.length == 0) {
             return this;
         }
-        for(Object var:vars){
+        for (Object var : vars) {
             appendVar(var).appendFixed(separator);
         }
         return this;
@@ -69,18 +69,18 @@ public class RedisKeyBuilder {
 
 
     public String getKey() {
-        if(innerkey!=null){
+        if (innerkey != null) {
             return innerkey;
         }
-        innerkey=key.toString();
+        innerkey = key.toString();
         return innerkey;
     }
 
     public String getKeyTemplate() {
-        if(innerKeyTemplate!=null){
+        if (innerKeyTemplate != null) {
             return innerKeyTemplate;
         }
-        innerKeyTemplate=keyTemplate.toString();
+        innerKeyTemplate = keyTemplate.toString();
         return innerKeyTemplate;
     }
 

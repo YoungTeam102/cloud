@@ -12,8 +12,8 @@ public class RedisConfig {
 
 
     @Bean(name = "StringRedisTemplate")
-    public RedisTemplate<String,String> getStringRedisTemplate(RedisConnectionFactory factory){
-        RedisTemplate<String,String> template = new RedisTemplate<String, String>();
+    public RedisTemplate<String, String> getStringRedisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, String> template = new RedisTemplate<String, String>();
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         template.setConnectionFactory(factory);
         template.setValueSerializer(stringRedisSerializer);
@@ -25,8 +25,8 @@ public class RedisConfig {
     }
 
     @Bean(name = "RedisTemplate")
-    public RedisTemplate<String,Object> getRedisTemplate(RedisConnectionFactory factory){
-        RedisTemplate<String,Object> template = new RedisTemplate<String, Object>();
+    public RedisTemplate<String, Object> getRedisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         template.setConnectionFactory(factory);
         template.setValueSerializer(stringRedisSerializer);

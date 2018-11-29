@@ -22,12 +22,12 @@ public class AsyncFuture<T> {
     private final int timeOut = 5;
 
     /**
-     *  constructor
+     * constructor
      */
     public AsyncFuture(Future<T> future, String serviceName) {
         this.future = future;
         this.serviceName = serviceName;
-        this.listenableFuture=null;
+        this.listenableFuture = null;
     }
 
     public AsyncFuture(ListenableFuture<ResponseEntity<T>> listenableFuture, String serviceName) {
@@ -45,7 +45,7 @@ public class AsyncFuture<T> {
     public T get(int seconds) {
         T t = null;
         try {
-            t = this.innerGet(TimeUnit.SECONDS.toMillis(seconds),TimeUnit.MILLISECONDS);
+            t = this.innerGet(TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS);
         } catch (Exception e) {
         } finally {
         }
@@ -53,46 +53,44 @@ public class AsyncFuture<T> {
         return t;
 
     }
-    
-    
-    public T get(int seconds,TimeUnit unit) {
+
+
+    public T get(int seconds, TimeUnit unit) {
 
         T t = null;
         try {
-            t = this.innerGet(unit.toMillis(seconds),TimeUnit.MILLISECONDS);
+            t = this.innerGet(unit.toMillis(seconds), TimeUnit.MILLISECONDS);
         } catch (Exception e) {
-           
+
         }
         return t;
     }
-    
-    
+
+
     /**
      * 获取服务调用结果
      *
      * @return 获取服务调用结果
      */
-    private T innerGet(long waitingSeconds,TimeUnit unit) {
+    private T innerGet(long waitingSeconds, TimeUnit unit) {
         T t = null;
         try {
-            if(this.future == null){
-                t = this.listenableFuture.get(waitingSeconds ,unit).getBody();
-            }else{
+            if (this.future == null) {
+                t = this.listenableFuture.get(waitingSeconds, unit).getBody();
+            } else {
                 t = this.future.get(waitingSeconds, unit);
             }
 
             //避免LogUtils.shotter  先执行
-        }catch(TimeoutException te){//增加超时异常
-        	log.warn("call service: {} failed:{} with TimeoutException.", serviceName,te);
+        } catch (TimeoutException te) {//增加超时异常
+            log.warn("call service: {} failed:{} with TimeoutException.", serviceName, te);
             this.future.cancel(true);
-        }catch(InterruptedException ie){//增加线程中断异常
-        	log.warn("call service: {} failed:{} with InterruptedException.", serviceName,ie);
+        } catch (InterruptedException ie) {//增加线程中断异常
+            log.warn("call service: {} failed:{} with InterruptedException.", serviceName, ie);
         } catch (Exception ex) {
         }
         return t;
     }
-
-
 
 
     /**
@@ -101,8 +99,8 @@ public class AsyncFuture<T> {
      * @return 获取服务调用结果
      */
     public T get() {
-        final int defaultTimeout=1000;
-        return this.get(defaultTimeout,TimeUnit.MILLISECONDS);
+        final int defaultTimeout = 1000;
+        return this.get(defaultTimeout, TimeUnit.MILLISECONDS);
     }
 
 

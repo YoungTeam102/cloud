@@ -3,7 +3,6 @@ package com.igniubi.rabbitmqdemo.properties;
 import lombok.Data;
 
 /**
- *
  * producer info
  */
 @Data
@@ -14,6 +13,7 @@ public class ProducerInfo {
     boolean isConfirm = true; // send confirm
     String confirmCallback;   // send confirm callback
     boolean isPersistent = true; // message persistent
+
     public ProducerInfo() {
     }
 

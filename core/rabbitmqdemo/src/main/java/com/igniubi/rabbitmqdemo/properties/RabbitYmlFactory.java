@@ -96,7 +96,7 @@ public class RabbitYmlFactory {
             String password = Optional.ofNullable((String) connMap.get("password")).orElse("admin");
             String vhost = Optional.ofNullable((String) connMap.get("vhost")).orElse("test");
             template = template + "RabbitTemplate";
-            ConnectionInfo consumerConn = new ConnectionInfo(heartbeat, connection,connection,template,address,port,username,password,vhost);
+            ConnectionInfo consumerConn = new ConnectionInfo(heartbeat, connection, connection, template, address, port, username, password, vhost);
 //            String connectionBean = "rabbit-connection-" + consumerConn.hashCode();
             consumerConn.setBeanId(connection);
 
@@ -198,7 +198,7 @@ public class RabbitYmlFactory {
             String password = Optional.ofNullable((String) connMap.get("password")).orElse("admin");
             String vhost = Optional.ofNullable((String) connMap.get("vhost")).orElse("test");
             template = template + "RabbitTemplate";
-            ConnectionInfo producerConn = new ConnectionInfo(heartbeat, connection,connection,template,address,port,username,password,vhost);
+            ConnectionInfo producerConn = new ConnectionInfo(heartbeat, connection, connection, template, address, port, username, password, vhost);
 
 //            String connectionBean = "rabbit-connection-" + producerConn.hashCode();
             producerConn.setBeanId(connection);
@@ -211,7 +211,7 @@ public class RabbitYmlFactory {
                 info.setConnection(producerConn);
                 info.setAsync(Optional.ofNullable((Boolean) producerMap.get("async")).orElse(false));
                 info.setConfirm(Optional.ofNullable((Boolean) producerMap.get("confirm")).orElse(true));
-                info.setConfirmCallback(Optional.ofNullable((String)producerMap.get("confirmcallback")).orElse(""));
+                info.setConfirmCallback(Optional.ofNullable((String) producerMap.get("confirmcallback")).orElse(""));
                 info.setPersistent(Optional.ofNullable((Boolean) producerMap.get("persistent")).orElse(false));
                 String beanId = Optional.ofNullable((String) producerMap.get("bean")).orElse("producer-" + UUID.randomUUID().toString());
                 info.setBeanName(beanId);
