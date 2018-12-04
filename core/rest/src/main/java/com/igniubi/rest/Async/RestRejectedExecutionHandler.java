@@ -7,6 +7,6 @@ public class RestRejectedExecutionHandler implements RejectedExecutionHandler {
 
     @Override
     public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-        //TODO   throws a new rest service exception here
+        //TODO   throws a rest service exception here
     }
 }
