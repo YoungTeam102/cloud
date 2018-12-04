@@ -7,7 +7,12 @@ import java.util.concurrent.*;
 
 public class AsyncRestCommand<T> {
 
-    private ExecutorService executor = Executors.newFixedThreadPool(10, Executors.defaultThreadFactory()) ;
+//    private ExecutorService executor = Executors.newFixedThreadPool(10, Executors.defaultThreadFactory()) ;
+    private ExecutorService executor = new ThreadPoolExecutor(10, 10,
+            0L, TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<Runnable>(50000),
+            Executors.defaultThreadFactory(),
+            new RestRejectedExecutionHandler());
 
 
     private final RestTemplate restTemplate;
@@ -25,7 +30,7 @@ public class AsyncRestCommand<T> {
     public Future<T> excute(){
         Future<T> t= executor.submit(new Callable<T>() {
             @Override
-            public T call() throws Exception {
+            public T call(){
                 return RestTempalteUtil.post(restTemplate,url, request, responseType);
             }
         });
@@ -35,7 +40,7 @@ public class AsyncRestCommand<T> {
     public Future<T> excuteGet(){
         Future<T> t= executor.submit(new Callable<T>() {
             @Override
-            public T call() throws Exception {
+            public T call(){
                 return RestTempalteUtil.get(restTemplate,url, request, responseType);
             }
         });
