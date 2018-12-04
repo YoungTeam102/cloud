@@ -1,17 +1,23 @@
 package com.igniubi.rest.client;
 
+import com.igniubi.rest.Async.AsyncRestCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @Component
 public class RestServiceCaller implements IRestClient {
 
     @Autowired
     RestTempalteUtil tempalteUtil;
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @Override
     public <T> T post(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
@@ -23,27 +29,32 @@ public class RestServiceCaller implements IRestClient {
     @Override
     public <T> T call(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
-        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncPost(serviceName, serviceUrl, request, responseType);
-        return new AsyncFuture<T>(t, serviceName + serviceUrl).get();
+        AsyncRestCommand<T> command = new AsyncRestCommand<>(restTemplate ,url ,request, responseType);
+        Future<T> t = command.excute();
+        return new AsyncFuture<T>(t, url).get();
     }
 
     @Override
     public <T> T get(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
-        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncGet(url, request, responseType);
-        return new AsyncFuture<T>(t, serviceName + serviceUrl).get();
+        AsyncRestCommand<T> command = new AsyncRestCommand<>(restTemplate ,url ,request, responseType);
+        Future<T> t = command.excuteGet();
+        return new AsyncFuture<T>(t, url).get();
     }
 
     @Override
     public <T> AsyncFuture<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
-        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncPost(serviceName, serviceUrl, request, responseType);
-        return new AsyncFuture<T>(t, serviceName + serviceUrl);
+        String url = serviceName + serviceUrl;
+        AsyncRestCommand<T> command = new AsyncRestCommand<>(restTemplate ,url ,request, responseType);
+        Future<T> t = command.excute();
+        return new AsyncFuture<T>(t, url);
     }
 
     @Override
     public <T> AsyncFuture<T> asyncGet(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
-        ListenableFuture<ResponseEntity<T>> t = tempalteUtil.asyncGet(url, request, responseType);
-        return new AsyncFuture<T>(t, serviceName + serviceUrl);
+        AsyncRestCommand<T> command = new AsyncRestCommand<>(restTemplate ,url ,request, responseType);
+        Future<T> t = command.excuteGet();
+        return new AsyncFuture<T>(t, url);
     }
 }

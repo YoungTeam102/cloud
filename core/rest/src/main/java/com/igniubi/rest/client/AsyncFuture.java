@@ -99,7 +99,7 @@ public class AsyncFuture<T> {
      * @return 获取服务调用结果
      */
     public T get() {
-        final int defaultTimeout = 1000;
+        final int defaultTimeout = 5000;
         return this.get(defaultTimeout, TimeUnit.MILLISECONDS);
     }
 
