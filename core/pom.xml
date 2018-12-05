@@ -63,6 +63,7 @@
         <module>redis</module>
         <module>rabbitmqdemo</module>
         <module>rest</module>
+        <module>common</module>
     </modules>
 
 </project>
