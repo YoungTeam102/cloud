@@ -64,6 +64,7 @@
         <module>rabbitmqdemo</module>
         <module>rest</module>
         <module>common</module>
+        <module>mybatis</module>
     </modules>
 
 </project>
