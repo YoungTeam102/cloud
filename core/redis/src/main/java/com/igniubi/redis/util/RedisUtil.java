@@ -2,6 +2,7 @@ package com.igniubi.redis.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.igniubi.model.common.RedisKeyEnum;
 import io.lettuce.core.RedisClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 
@@ -71,4 +73,25 @@ public class RedisUtil {
         return result;
     }
 
+    public  <T> T  cacheObtain(RedisKeyEnum keyEnum, Object key, Callable<T> callable, Class<T> c){
+        RedisKeyBuilder keyBuilder = RedisKeyBuilder.newInstance().appendFixed(keyEnum.getCacheKey()).appendVar(key);
+
+        T t =  this.get(keyBuilder, c);
+
+        if(t != null){
+            return t;
+        }
+
+        try {
+            t = callable.call();
+        } catch (Exception e) {
+            logger.info("cacheObtain error, e is {}", e);
+        }
+
+        if(t != null ){
+            this.set(keyBuilder, t, keyEnum.getCacheTime(), keyEnum.getTimeUnit());
+        }
+
+        return t;
+    }
 }
