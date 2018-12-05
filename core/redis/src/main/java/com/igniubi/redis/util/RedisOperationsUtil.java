@@ -1,6 +1,6 @@
 package com.igniubi.redis.util;
 
-import com.igniubi.model.common.RedisKeyEnum;
+import com.igniubi.model.enums.common.RedisKeyEnum;
 import com.igniubi.redis.operations.RedisValueOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
