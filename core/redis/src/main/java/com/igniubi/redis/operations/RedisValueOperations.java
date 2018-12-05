@@ -1,36 +1,25 @@
-package com.igniubi.redis.util;
+package com.igniubi.redis.operations;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.igniubi.model.common.RedisKeyEnum;
-import io.lettuce.core.RedisClient;
+import com.igniubi.redis.util.RedisKeyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-
-/**
- * 就一个小Demo 随便写下
- */
 @Component
-public class RedisUtil {
+public class RedisValueOperations{
 
-    private static final Logger logger = LoggerFactory.getLogger(RedisClient.class);
-
-
-    private final RedisTemplate<String, String> stringRedisTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(ValueOperations.class);
 
     @Autowired
-    public RedisUtil(RedisTemplate<String, String> stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
-    }
-
+    private  RedisTemplate<String, String> stringRedisTemplate;
 
     public <T> T get(RedisKeyBuilder keyBuilder, Class<T> tClass) {
         String result;
@@ -73,25 +62,4 @@ public class RedisUtil {
         return result;
     }
 
-    public  <T> T  cacheObtain(RedisKeyEnum keyEnum, Object key, Callable<T> callable, Class<T> c){
-        RedisKeyBuilder keyBuilder = RedisKeyBuilder.newInstance().appendFixed(keyEnum.getCacheKey()).appendVar(key);
-
-        T t =  this.get(keyBuilder, c);
-
-        if(t != null){
-            return t;
-        }
-
-        try {
-            t = callable.call();
-        } catch (Exception e) {
-            logger.info("cacheObtain error, e is {}", e);
-        }
-
-        if(t != null ){
-            this.set(keyBuilder, t, keyEnum.getCacheTime(), keyEnum.getTimeUnit());
-        }
-
-        return t;
-    }
 }
