@@ -1,5 +1,7 @@
 package com.igniubi.rest.client;
 
+import com.igniubi.common.exceptions.IGNBException;
+import com.igniubi.model.enums.common.ResultEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -44,11 +46,9 @@ public class AsyncFuture<T> {
      */
     public T get(int seconds) {
         T t = null;
-        try {
-            t = this.innerGet(TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS);
-        } catch (Exception e) {
-        } finally {
-        }
+
+        t = this.innerGet(TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS);
+
 
         return t;
 
@@ -58,11 +58,8 @@ public class AsyncFuture<T> {
     public T get(int seconds, TimeUnit unit) {
 
         T t = null;
-        try {
-            t = this.innerGet(unit.toMillis(seconds), TimeUnit.MILLISECONDS);
-        } catch (Exception e) {
+        t = this.innerGet(unit.toMillis(seconds), TimeUnit.MILLISECONDS);
 
-        }
         return t;
     }
 
@@ -85,9 +82,20 @@ public class AsyncFuture<T> {
         } catch (TimeoutException te) {//增加超时异常
             log.warn("call service: {} failed:{} with TimeoutException.", serviceName, te);
             this.future.cancel(true);
+            throw new IGNBException(ResultEnum.SERVICE_NOT_AVAILABLE);
         } catch (InterruptedException ie) {//增加线程中断异常
             log.warn("call service: {} failed:{} with InterruptedException.", serviceName, ie);
+            throw new IGNBException(ResultEnum.SERVICE_NOT_AVAILABLE);
         } catch (Exception ex) {
+            if(ex instanceof IGNBException){
+                IGNBException se = (IGNBException) (ex.getCause());
+                log.info("call service: {}, return: {} success.", serviceName, se.getMessage());
+                throw se;
+            }
+            else {
+                log.warn("call service: {} failed with exception.", serviceName, ex);
+                throw new IGNBException(ResultEnum.SERVICE_NOT_AVAILABLE);
+            }
         }
         return t;
     }
