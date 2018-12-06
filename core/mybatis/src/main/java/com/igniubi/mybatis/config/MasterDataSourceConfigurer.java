@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 类说明
+ * 读取配置文件,并赋值给成员属性
  * <p>
  *
  * @author 徐擂
@@ -14,11 +14,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnProperty(
-        prefix = "igniubi.dataSource",
+        prefix = "igniubi.datasource",
         name = {"masterJdbcUrl"}
 )
 @ConfigurationProperties(
-        prefix = "igniubi.dataSource"
+        prefix = "igniubi.datasource"
 )
 public class MasterDataSourceConfigurer {
     private String driverClassName;

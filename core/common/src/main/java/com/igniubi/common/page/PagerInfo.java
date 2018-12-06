@@ -41,6 +41,14 @@ public class PagerInfo<T> {
     @JsonIgnore
     private String totalMapperId;
 
+    public PagerInfo() {
+    }
+
+    public PagerInfo(int pageNum, int pageSize) {
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+    }
+
     public int getCode() { return code; }
 
     public void setCode(int code) { this.code = code; }

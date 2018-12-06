@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 /**
- * 类说明
+ * 公共数据源(主)
  * <p>
  *
  * @author 徐擂
