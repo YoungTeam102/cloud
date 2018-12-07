@@ -4,6 +4,8 @@ import com.alibaba.fastjson.support.spring.FastJsonJsonView;
 import com.igniubi.model.enums.common.ResultEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,6 +20,7 @@ import java.util.Map;
  * 1. 返回200，并且用json作为消息体，并且设置消息头（方便resttemplate处理）
  * 2. 返回500，设置消息头
  */
+@Component
 public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

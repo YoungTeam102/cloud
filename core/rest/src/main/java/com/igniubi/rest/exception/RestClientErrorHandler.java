@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -26,6 +27,7 @@ import java.nio.charset.Charset;
  * 1. 调用服务返回不是200 OK 则抛出 {@link HttpClientErrorException} 或者 {@link HttpServerErrorException}
  * 2. 调用服务返回200 OK，但是响应头中有一个自定义的:x-yh-service-error-code, ，则抛出 {@link IGNBException}
  */
+@Component
 public class RestClientErrorHandler implements ResponseErrorHandler {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
