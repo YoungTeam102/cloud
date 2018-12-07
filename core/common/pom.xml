@@ -26,8 +26,8 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.igniubi</groupId>
-            <artifactId>model</artifactId>
+            <groupId>com.igniubi.model</groupId>
+            <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
 

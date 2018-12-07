@@ -23,9 +23,9 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.igniubi</groupId>
-            <artifactId>model</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>com.igniubi.model</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>
