@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,7 +22,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
@@ -33,20 +34,12 @@ import javax.sql.DataSource;
  * @date 2018-12-5
  */
 @Configuration
-@EnableTransactionManagement
 @EnableConfigurationProperties({MasterDataSourceConfigurer.class})
-@MapperScan(
-        basePackages = {"com.igniubi.**.mapper.master"},
-        sqlSessionFactoryRef = "masterSqlSessionFactory"
-)
 @AutoConfigureBefore({DataSourceAutoConfiguration.class})
-@ConditionalOnProperty(
-        prefix = "igniubi.dataSource",
-        name = {"masterJdbcUrl"}
-)
-@ConfigurationProperties(
-        prefix = "igniubi.dataSource"
-)
+@ConditionalOnBean(MasterDataSourceConfigurer.class)
+@MapperScan(value = "com.igniubi.*.mapper",
+  sqlSessionFactoryRef="masterSqlSessionFactory")
+
 public class MasterMybatisDatasource {
     private static final Logger LOGGER = LoggerFactory.getLogger(MasterMybatisDatasource.class);
     public static final String MASTER_TRANSACTION_MANAGER = "masterTransactionManager";
