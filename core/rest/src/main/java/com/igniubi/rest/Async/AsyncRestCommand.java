@@ -28,22 +28,12 @@ public class AsyncRestCommand<T> {
     }
 
     public Future<T> excute(){
-        Future<T> t= executor.submit(new Callable<T>() {
-            @Override
-            public T call(){
-                return RestTempalteUtil.post(restTemplate,url, request, responseType);
-            }
-        });
+        Future<T> t= executor.submit(() -> RestTempalteUtil.post(restTemplate,url, request, responseType));
         return t;
     }
 
     public Future<T> excuteGet(){
-        Future<T> t= executor.submit(new Callable<T>() {
-            @Override
-            public T call(){
-                return RestTempalteUtil.get(restTemplate,url, request, responseType);
-            }
-        });
+        Future<T> t= executor.submit(() -> RestTempalteUtil.get(restTemplate,url, request, responseType));
         return t;
     }
 
