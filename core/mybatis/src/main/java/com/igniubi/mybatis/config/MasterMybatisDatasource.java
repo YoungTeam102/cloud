@@ -57,7 +57,7 @@ public class MasterMybatisDatasource {
         factory.setDataSource(dataSource);
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         Resource[] resources = resolver.getResources("classpath:mybatis-config.xml");
-        if (resources != null && resources.length > 0) {
+        if (resources.length > 0) {
             factory.setConfigLocation(resources[0]);
         }
         //设置mapper文件读取位置
@@ -80,7 +80,7 @@ public class MasterMybatisDatasource {
         ds.setUsername(this.masterDataSourceConfigurer.getMasterUsername());
         ds.setPassword(this.masterDataSourceConfigurer.getMasterPassword());
         ds.setMinimumIdle(5);
-        ds.addDataSourceProperty("maxLifetime", Integer.valueOf(60000));
+        ds.addDataSourceProperty("maxLifetime", 60000);
         ds.addDataSourceProperty("cachePrepStmts", this.masterDataSourceConfigurer.isCachePrepStmts());
         ds.addDataSourceProperty("prepStmtCacheSize", this.masterDataSourceConfigurer.getPrepStmtCacheSize());
         ds.addDataSourceProperty("prepStmtCacheSqlLimit", this.masterDataSourceConfigurer.getPrepStmtCacheSqlLimit());
