@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,16 +17,23 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisValueOperations{
 
-    private static final Logger logger = LoggerFactory.getLogger(ValueOperations.class);
+    private static final Logger logger = LoggerFactory.getLogger(RedisValueOperations.class);
 
-    @Autowired
     private  RedisTemplate<String, String> stringRedisTemplate;
 
+    private ValueOperations<String, String> valueOperations;
+
+    @Autowired
+    public RedisValueOperations(RedisTemplate<String, String> stringRedisTemplate) {
+        this.stringRedisTemplate = stringRedisTemplate;
+        valueOperations = stringRedisTemplate.opsForValue();
+    }
     public <T> T get(RedisKeyBuilder keyBuilder, Class<T> tClass) {
         String result;
         T t = null;
         try {
-            result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).get();
+//            result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).get();
+            result =valueOperations.get(keyBuilder.getKey());
             t = JSONObject.parseObject(result, tClass);
         } catch (Exception e) {
             logger.warn("RedisUtil get error, key is {}, e is {}", keyBuilder.getKey(), e);
@@ -35,7 +43,8 @@ public class RedisValueOperations{
 
     public <T> List<T> getList(RedisKeyBuilder keyBuilder, Class<T> clazz) {
         try {
-            String result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).get();
+//            String result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).get();
+            String result =valueOperations.get(keyBuilder.getKey());
             return JSON.parseArray(result, clazz);
         } catch (Exception e) {
             logger.warn("RedisUtil getList error, key is {}, e is {}", keyBuilder.getKey(), e);
@@ -45,7 +54,8 @@ public class RedisValueOperations{
 
     public void set(RedisKeyBuilder keyBuilder, Object value, long timeout, TimeUnit unit) {
         try {
-            stringRedisTemplate.boundValueOps(keyBuilder.getKey()).set(JSON.toJSONString(value), timeout, unit);
+//            stringRedisTemplate.boundValueOps(keyBuilder.getKey()).set(JSON.toJSONString(value), timeout, unit);
+            valueOperations.set(keyBuilder.getKey(), JSON.toJSONString(value), timeout, unit );
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }
@@ -54,7 +64,8 @@ public class RedisValueOperations{
     public Long increament(RedisKeyBuilder keyBuilder, long value, long timeout, TimeUnit unit) {
         Long result = null;
         try {
-            result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).increment(value);
+//            result = stringRedisTemplate.boundValueOps(keyBuilder.getKey()).increment(value);
+            result = valueOperations.increment(keyBuilder.getKey(), value);
             stringRedisTemplate.boundValueOps(keyBuilder.getKey()).expire(timeout, unit);
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
