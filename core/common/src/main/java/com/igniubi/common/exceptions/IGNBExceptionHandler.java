@@ -21,6 +21,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 异常处理
+ * <p>
+ *
+ * @author 徐擂
+ * @version 1.0.0
+ * @date 2018-12-5
+ */
 @ControllerAdvice
 public class IGNBExceptionHandler {
 
