@@ -15,10 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -50,9 +47,10 @@ public class IGNBExceptionHandler {
             errorMessage = ((ObjectError)errors.get(0)).getDefaultMessage();
         }
         //add header
-        httpServletResponse.addHeader(IGNBGlobalExceptionHandler.HEADER_ERROR_CODE, String.valueOf(ResultEnum.BAD_REQUEST_PARAMS.getCode()));
-        httpServletResponse.addHeader(IGNBGlobalExceptionHandler.HEADER_ERROR_MESSAGE, Optional.ofNullable(errorMessage).orElse(ResultEnum.BAD_REQUEST_PARAMS.getMsg()));
         httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.setContentType("application/json;charset=UTF-8");
+        httpServletResponse.addHeader(IGNBGlobalExceptionHandler.HEADER_ERROR_CODE, String.valueOf(ResultEnum.BAD_REQUEST_PARAMS.getCode()));
+        IGNBGlobalExceptionHandler.addHeadWithISO(httpServletResponse, Optional.ofNullable(errorMessage).orElse(ResultEnum.BAD_REQUEST_PARAMS.getMsg()));
         logger.info("handleMethodArgumentNotValidException with method is {}, errorMessage is {} ", request.getRequestURI(), errorMessage);
         ModelAndView mv = IGNBGlobalExceptionHandler.getErrorJsonView(ResultEnum.BAD_REQUEST_PARAMS.getCode(), errorMessage);
         return mv;

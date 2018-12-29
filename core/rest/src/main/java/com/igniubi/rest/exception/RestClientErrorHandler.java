@@ -80,7 +80,12 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
     private String getServiceErrorMessage(ClientHttpResponse response){
         String header =  response.getHeaders().getFirst(IGNBGlobalExceptionHandler.HEADER_ERROR_MESSAGE);
         if(StringUtils.isNotEmpty(header)){
-            return header;
+            try {
+                header = new String(header.getBytes("ISO8859-1"),"UTF-8");
+                return header;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

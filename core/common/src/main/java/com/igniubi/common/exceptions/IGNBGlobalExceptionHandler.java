@@ -13,8 +13,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -54,7 +56,8 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
             logger.error("unknown exception happened at:{}", httpServletRequest.getRequestURI());
             logger.error("unknown exception is ", exception);
             httpServletResponse.setStatus(500);
-            httpServletResponse.addHeader(HEADER_ERROR_MESSAGE, exception.getMessage());
+            addHeadWithISO(httpServletResponse,exception.getMessage() );
+
             return new ModelAndView();
         }
 
@@ -66,12 +69,13 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
         String message = se.getMessage();
         //add header
         httpServletResponse.addHeader(HEADER_ERROR_CODE, String.valueOf(code));
-        httpServletResponse.addHeader(HEADER_ERROR_MESSAGE, message);
+        addHeadWithISO(httpServletResponse, message);
+
         //如果是服务不可用，直接返回500，并且打印异常
         if ( code == ResultEnum.SERVICE_NOT_AVAILABLE.getCode()) {
             logger.error("service not available exception happened at:{}", httpServletRequest.getRequestURI());
             httpServletResponse.setStatus(500);
-            httpServletResponse.addHeader(HEADER_ERROR_MESSAGE, exception.getMessage());
+            addHeadWithISO(httpServletResponse, message);
             return new ModelAndView();
         }
         ModelAndView mv = getErrorJsonView(code, message);
@@ -92,6 +96,15 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
         jsonView.setAttributesMap(errorInfoMap);
         modelAndView.setView(jsonView);
         return modelAndView;
+    }
+
+    public static void addHeadWithISO( HttpServletResponse httpServletResponse, String message) {
+        try {
+            httpServletResponse.addHeader(HEADER_ERROR_MESSAGE, new String(
+                    message.getBytes("UTF-8"),"ISO8859-1"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 
