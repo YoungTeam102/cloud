@@ -6,8 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,6 +30,7 @@ import java.util.Optional;
  * 2. 返回500，设置消息头
  */
 @Component
+@ControllerAdvice
 public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -39,17 +45,6 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception exception) {
 
-
-        //publish event
-
-//        if(exception instanceof MethodArgumentNotValidException){
-//            logger.error("method argument validate error at {}", httpServletRequest.getRequestURI());
-//            logger.error("method argument validate error, e is  {}", exception);
-//            ModelAndView mv = getErrorJsonView(400, exception.getMessage());
-//            httpServletResponse.addHeader(HEADER_ERROR_CODE, String.valueOf(400));
-//            httpServletResponse.addHeader(HEADER_ERROR_MESSAGE, exception.getMessage());
-//            return mv;
-//        }
 
         //如果不是服务异常，直接返回500，并且打印异常
         if (!(exception instanceof IGNBException)) {
@@ -82,12 +77,28 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
         return mv;
     }
 
-
+    @ExceptionHandler({MethodArgumentNotValidException.class, MissingServletRequestParameterException.class})
+    @ResponseBody
+    public ModelAndView handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request,HttpServletResponse httpServletResponse) throws UnsupportedEncodingException {
+        String errorMessage = null;
+        List<ObjectError> errors = ex.getBindingResult().getAllErrors();
+        if (errors.size() > 0) {
+            errorMessage = ((ObjectError)errors.get(0)).getDefaultMessage();
+        }
+        //add header
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.setContentType("application/json;charset=UTF-8");
+        httpServletResponse.addHeader(IGNBGlobalExceptionHandler.HEADER_ERROR_CODE, String.valueOf(ResultEnum.BAD_REQUEST_PARAMS.getCode()));
+        addHeadWithISO(httpServletResponse, Optional.ofNullable(errorMessage).orElse(ResultEnum.BAD_REQUEST_PARAMS.getMsg()));
+        logger.info("handleMethodArgumentNotValidException with method is {}, errorMessage is {} ", request.getRequestURI(), errorMessage);
+        ModelAndView mv = getErrorJsonView(ResultEnum.BAD_REQUEST_PARAMS.getCode(), errorMessage);
+        return mv;
+    }
 
     /**
      * 使用FastJson提供的FastJsonJsonView视图返回，不需要捕获异常
      */
-    public static ModelAndView getErrorJsonView(int code, String message) {
+    private static ModelAndView getErrorJsonView(int code, String message) {
         ModelAndView modelAndView = new ModelAndView();
         FastJsonJsonView jsonView = new FastJsonJsonView();
         Map<String, Object> errorInfoMap = new HashMap<>();
@@ -98,7 +109,7 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
         return modelAndView;
     }
 
-    public static void addHeadWithISO( HttpServletResponse httpServletResponse, String message) {
+    private static void addHeadWithISO(HttpServletResponse httpServletResponse, String message) {
         try {
             httpServletResponse.addHeader(HEADER_ERROR_MESSAGE, new String(
                     message.getBytes("UTF-8"),"ISO8859-1"));
