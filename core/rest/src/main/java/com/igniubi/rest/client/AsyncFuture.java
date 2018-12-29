@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -87,10 +89,17 @@ public class AsyncFuture<T> {
             log.warn("call service: {} failed:{} with InterruptedException.", serviceName, ie);
             throw new IGNBException(ResultEnum.SERVICE_NOT_AVAILABLE);
         } catch (Exception ex) {
-            if(ex instanceof IGNBException){
-                IGNBException se = (IGNBException) (ex.getCause());
-                log.info("call service: {}, return: {} success.", serviceName, se.getMessage());
-                throw se;
+            if (ex instanceof ExecutionException) {
+                if (ex.getCause() instanceof IGNBException ) {
+                    IGNBException se = (IGNBException) (ex.getCause());
+                    log.info("call service: {}, return: {} success.", serviceName, se.getMessage());
+                    throw se;
+                }
+                //不是service exception
+                else {
+                    log.warn("call service: {} failed with exception.", serviceName, ex);
+                    throw new IGNBException(ResultEnum.SERVICE_NOT_AVAILABLE);
+                }
             }
             else {
                 log.warn("call service: {} failed with exception.", serviceName, ex);

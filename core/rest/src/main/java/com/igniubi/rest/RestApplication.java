@@ -1,8 +1,12 @@
 package com.igniubi.rest;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.igniubi.rest.exception.RestClientErrorHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,19 +43,25 @@ public class RestApplication {
         mediaTypes.add(MediaType.parseMediaType(MediaType.TEXT_HTML_VALUE));
         mediaTypes.add(MediaType.parseMediaType(MediaType.TEXT_PLAIN_VALUE));
         mediaTypes.add(MediaType.parseMediaType(MediaType.TEXT_XML_VALUE));
+
         StringHttpMessageConverter stringHttpMessageConverter =  new StringHttpMessageConverter(Charset.forName("UTF-8"));
         stringHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
         converters.add(stringHttpMessageConverter);
         converters.add(new ResourceHttpMessageConverter());
         converters.add(new FormHttpMessageConverter());
+
         FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
         List<MediaType> mediaTypes1 = new ArrayList<>();
-        mediaTypes1.add(MediaType.APPLICATION_JSON);
+        mediaTypes1.add(MediaType.APPLICATION_JSON_UTF8);
+        FastJsonConfig config = new FastJsonConfig();
+        config.setSerializerFeatures(SerializerFeature.WriteMapNullValue);
         fastJsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes1);
+        fastJsonHttpMessageConverter.setFastJsonConfig(config);
         converters.add(fastJsonHttpMessageConverter);
 //        converters.add(new MappingJackson2XmlHttpMessageConverter());
 //        converters.add(new MappingJackson2HttpMessageConverter());
         restTemplate.setMessageConverters(converters);
+        restTemplate.setErrorHandler(new RestClientErrorHandler());
         return restTemplate;
     }
 

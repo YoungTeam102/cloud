@@ -18,6 +18,7 @@ import org.springframework.web.client.UnknownHttpStatusCodeException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 
@@ -27,7 +28,6 @@ import java.nio.charset.Charset;
  * 1. 调用服务返回不是200 OK 则抛出 {@link HttpClientErrorException} 或者 {@link HttpServerErrorException}
  * 2. 调用服务返回200 OK，但是响应头中有一个自定义的:x-yh-service-error-code, ，则抛出 {@link IGNBException}
  */
-@Component
 public class RestClientErrorHandler implements ResponseErrorHandler {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
