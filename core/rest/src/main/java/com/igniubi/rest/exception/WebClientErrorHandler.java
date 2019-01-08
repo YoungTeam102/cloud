@@ -19,7 +19,11 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * webclient异常处理，下面的情况认为是出错了：
+ * 1. 调用服务返回不是200 ，响应头中有一个自定义的:x-service-error-code, ，则抛出 {@link IGNBException}
+ *  2.调用服务返回不是200 ,响应头中没有x-service-error-code 则抛出 {@link HttpClientErrorException} 或者 {@link HttpServerErrorException}
+ */
 public class WebClientErrorHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -37,6 +41,7 @@ public class WebClientErrorHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        assert statusCode != null;
         switch (statusCode.series()) {
             case CLIENT_ERROR:{
                 if(getServiceErrorCode(response) > 0){
@@ -92,8 +97,7 @@ public class WebClientErrorHandler {
         List<String> header =  response.headers().header(IGNBGlobalExceptionHandler.HEADER_ERROR_MESSAGE);
         if(header.size()>0 ){
             try {
-                String header1 = new String(header.get(0).getBytes("ISO8859-1"),"UTF-8");
-                return header1;
+                return new String(header.get(0).getBytes("ISO8859-1"),"UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

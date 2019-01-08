@@ -28,6 +28,10 @@ import java.util.Optional;
  * 服务的全局异常处理
  * 1. 返回200，并且用json作为消息体，并且设置消息头（方便resttemplate处理）
  * 2. 返回500，设置消息头
+ *  服务的全局异常处理（webclient）
+ *  1. ignbexception 返回500，设置消息头(x-service-error-code). webclient 处理http500时，先判断是否有该消息头
+ *  2. 非ignbexception，不设置头
+ *  3. 验参异常，同1
  */
 @Component
 @ControllerAdvice
@@ -87,6 +91,7 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         httpServletResponse.addHeader(IGNBGlobalExceptionHandler.HEADER_ERROR_CODE, String.valueOf(ResultEnum.BAD_REQUEST_PARAMS.getCode()));
+        httpServletResponse.setStatus(500);
         addHeadWithISO(httpServletResponse, Optional.ofNullable(errorMessage).orElse(ResultEnum.BAD_REQUEST_PARAMS.getMsg()));
         logger.info("handleMethodArgumentNotValidException with method is {}, errorMessage is {} ", request.getRequestURI(), errorMessage);
         ModelAndView mv = getErrorJsonView(ResultEnum.BAD_REQUEST_PARAMS.getCode(), errorMessage);
