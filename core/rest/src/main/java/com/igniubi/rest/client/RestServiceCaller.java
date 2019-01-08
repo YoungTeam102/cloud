@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 @Component
+@Deprecated
 public class RestServiceCaller implements IRestClient {
 
     @Autowired

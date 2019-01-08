@@ -36,7 +36,13 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
     public void handleError(ClientHttpResponse response) throws IOException {
         HttpStatus statusCode = getHttpStatusCode(response);
         switch (statusCode.series()) {
+
             case CLIENT_ERROR:{
+                if(getServiceErrorCode(response) > 0){
+                    IGNBException se =  new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
+                    log.info("service call with service exception: {}",  se.getMessage());
+                    throw  se;
+                }
                 HttpClientErrorException ex = new HttpClientErrorException(statusCode, response.getStatusText(),
                         response.getHeaders(), getResponseBody(response), getCharset(response));
                 log.error("service call client error",  ex);
@@ -44,6 +50,11 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
             }
 
             case SERVER_ERROR: {
+                if(getServiceErrorCode(response) > 0){
+                    IGNBException se =  new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
+                    log.info("service call with service exception: {}",  se.getMessage());
+                    throw  se;
+                }
                 HttpServerErrorException ex = new HttpServerErrorException(statusCode, response.getStatusText(),
                         response.getHeaders(), getResponseBody(response), getCharset(response));
                 log.error("service call server error",  ex);

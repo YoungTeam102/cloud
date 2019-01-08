@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 @Component
+@Deprecated
 public class RestTempalteUtil  {
 
 

@@ -1,12 +1,9 @@
 package com.igniubi.rest.client;
 
-import com.igniubi.rest.Async.AsyncRestCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.Future;
 
 @Component
 public class RestClientCaller implements IRestClient {
