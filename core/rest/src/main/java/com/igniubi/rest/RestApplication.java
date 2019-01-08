@@ -11,9 +11,11 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.converter.*;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -77,4 +79,10 @@ public class RestApplication {
     }
 
 
+    @Bean
+    @LoadBalanced
+    public WebClient.Builder webClientBuilder(){
+
+        return WebClient.builder();
+    }
 }

@@ -55,15 +55,13 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
 
             return new ModelAndView();
         }
-
-
-
         //处理服务异常。 需要添加异常信息到头中，并且返回json
         IGNBException se =  (IGNBException) exception;
         int code = se.getCode();
         String message = se.getMessage();
         //add header
         httpServletResponse.addHeader(HEADER_ERROR_CODE, String.valueOf(code));
+        httpServletResponse.setStatus(500);
         addHeadWithISO(httpServletResponse, message);
 
         //如果是服务不可用，直接返回500，并且打印异常
@@ -111,8 +109,9 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
 
     private static void addHeadWithISO(HttpServletResponse httpServletResponse, String message) {
         try {
+            String msg = Optional.ofNullable(message).orElse("");
             httpServletResponse.addHeader(HEADER_ERROR_MESSAGE, new String(
-                    message.getBytes("UTF-8"),"ISO8859-1"));
+                    msg.getBytes("UTF-8"),"ISO8859-1"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
