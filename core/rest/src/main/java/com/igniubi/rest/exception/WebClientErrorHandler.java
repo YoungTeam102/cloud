@@ -9,12 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.util.MimeType;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.UnknownHttpStatusCodeException;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -35,12 +33,7 @@ public class WebClientErrorHandler {
     }
 
     public <T> Mono<T> handleError()  {
-        HttpStatus statusCode = null;
-        try {
-            statusCode = getHttpStatusCode(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        HttpStatus statusCode = getHttpStatusCode(response);
         assert statusCode != null;
         switch (statusCode.series()) {
             case CLIENT_ERROR:{
@@ -84,14 +77,6 @@ public class WebClientErrorHandler {
         return 0;
     }
 
-    public boolean hasError(ClientResponse response ) throws IOException {
-
-        int errorCode = this.getServiceErrorCode(response);
-
-        HttpStatus statusCode= getHttpStatusCode(response);
-        return  (errorCode>0) || (statusCode.series() == HttpStatus.Series.CLIENT_ERROR ||
-                statusCode.series() == HttpStatus.Series.SERVER_ERROR) ;
-    }
 
     private String getServiceErrorMessage(ClientResponse response){
         List<String> header =  response.headers().header(IGNBGlobalExceptionHandler.HEADER_ERROR_MESSAGE);
@@ -106,15 +91,9 @@ public class WebClientErrorHandler {
     }
 
 
-    private HttpStatus getHttpStatusCode(ClientResponse response) throws IOException {
+    private HttpStatus getHttpStatusCode(ClientResponse response)   {
         HttpStatus statusCode;
-        try {
-            statusCode = response.statusCode();
-        }
-        catch (IllegalArgumentException ex) {
-            throw new UnknownHttpStatusCodeException(response.rawStatusCode(),
-                    response.statusCode().getReasonPhrase(),  response.headers().asHttpHeaders(), getResponseBody(response), getCharset(response));
-        }
+        statusCode = response.statusCode();
         return statusCode;
     }
 
