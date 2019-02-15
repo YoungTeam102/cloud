@@ -23,16 +23,14 @@ import java.util.Optional;
  *  2.调用服务返回不是200 ,响应头中没有x-service-error-code 则抛出 {@link HttpClientErrorException} 或者 {@link HttpServerErrorException}
  */
 public class WebClientErrorHandler {
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private static final Logger log = LoggerFactory.getLogger(WebClientErrorHandler.class);
 
     private ClientResponse response;
 
 
-    public WebClientErrorHandler(ClientResponse response) {
-        this.response = response;
-    }
 
-    public <T> Mono<T> handleError()  {
+
+    public static  <T> Mono<T> handleError(ClientResponse response)  {
         HttpStatus statusCode = getHttpStatusCode(response);
         assert statusCode != null;
         switch (statusCode.series()) {
@@ -69,7 +67,7 @@ public class WebClientErrorHandler {
 
     }
 
-    private int getServiceErrorCode(ClientResponse response){
+    private static  int getServiceErrorCode(ClientResponse response){
         List<String> header =  response.headers().header(IGNBGlobalExceptionHandler.HEADER_ERROR_CODE);
         if(header.size()>0 ){
             return Integer.parseInt(header.get(0));
@@ -78,7 +76,7 @@ public class WebClientErrorHandler {
     }
 
 
-    private String getServiceErrorMessage(ClientResponse response){
+    private static String getServiceErrorMessage(ClientResponse response){
         List<String> header =  response.headers().header(IGNBGlobalExceptionHandler.HEADER_ERROR_MESSAGE);
         if(header.size()>0 ){
             try {
@@ -91,18 +89,18 @@ public class WebClientErrorHandler {
     }
 
 
-    private HttpStatus getHttpStatusCode(ClientResponse response)   {
+    private static HttpStatus getHttpStatusCode(ClientResponse response)   {
         HttpStatus statusCode;
         statusCode = response.statusCode();
         return statusCode;
     }
 
-    private byte[] getResponseBody(ClientResponse response) {
+    private static byte[] getResponseBody(ClientResponse response) {
         Flux<byte[]> responseBody = response.bodyToFlux(byte[].class);
         return responseBody.blockFirst();
     }
 
-    private Charset getCharset(ClientResponse response) {
+    private static Charset getCharset(ClientResponse response) {
         ClientResponse.Headers headers = response.headers();
         Optional<MediaType> contentType = headers.contentType();
         return contentType.map(MimeType::getCharset).orElse(null);

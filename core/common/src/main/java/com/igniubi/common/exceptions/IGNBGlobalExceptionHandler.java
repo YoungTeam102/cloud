@@ -4,7 +4,7 @@ import com.alibaba.fastjson.support.spring.FastJsonJsonView;
 import com.igniubi.model.enums.common.ResultEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -47,7 +47,7 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
 
 
     @Override
-    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception exception) {
+    public ModelAndView resolveException(@NonNull HttpServletRequest httpServletRequest, @NonNull HttpServletResponse httpServletResponse, Object handler, @NonNull Exception exception) {
 
 
         //如果不是服务异常，直接返回500，并且打印异常

@@ -26,7 +26,7 @@ public class WebClientUtil {
             }
         }
         final URI getURI = builder.build().encode().toUri();
-        Mono<T> mono  = webClientBuilder.build().get().uri(getURI).retrieve().onStatus(HttpStatus::isError,clientResponse -> new WebClientErrorHandler(clientResponse).handleError()).bodyToMono(responseType);
+        Mono<T> mono  = webClientBuilder.build().get().uri(getURI).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
         return mono;
     }
 
@@ -39,17 +39,17 @@ public class WebClientUtil {
             }
         }
         final URI getURI = builder.build().encode().toUri();
-        Mono<T> mono  =  webClientBuilder.build().get().uri(getURI).retrieve().onStatus(HttpStatus::isError,clientResponse -> new WebClientErrorHandler(clientResponse).handleError()).bodyToMono(responseType);
+        Mono<T> mono  =  webClientBuilder.build().get().uri(getURI).retrieve().onStatus(HttpStatus::isError,WebClientErrorHandler::handleError).bodyToMono(responseType);
         return mono.block();
     }
 
     public <T> Mono<T> post(String url, Object request, Class<T> responseType){
-        Mono<T> mono  =   webClientBuilder.build().post().uri(url).syncBody(request).retrieve().onStatus(HttpStatus::isError, clientResponse -> new WebClientErrorHandler(clientResponse).handleError()).bodyToMono(responseType);
+        Mono<T> mono  =   webClientBuilder.build().post().uri(url).syncBody(request).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
         return mono;
     }
 
     public <T> T postEntity(String url, Object request, Class<T> responseType){
-        Mono<T> mono  =  webClientBuilder.build().post().uri(url).syncBody(request).retrieve().onStatus(HttpStatus::isError,clientResponse -> new WebClientErrorHandler(clientResponse).handleError()).bodyToMono(responseType);
+        Mono<T> mono  =  webClientBuilder.build().post().uri(url).syncBody(request).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
         return mono.block();
     }
 }
