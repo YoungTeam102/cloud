@@ -23,27 +23,27 @@ public class RestClientCaller implements IRestClient {
     public <T> T call(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         Mono<T> mono  = clientUtil.post(url, request, responseType);
-        return new AsyncFuture<T>(mono.toFuture(), url).get();
+        return new AsyncResult<T>(mono.toFuture(), url).get();
     }
 
     @Override
     public <T> T get(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         Mono<T> mono = clientUtil.get(url, request, responseType);
-        return new AsyncFuture<T>(mono.toFuture(), url).get();
+        return new AsyncResult<T>(mono.toFuture(), url).get();
     }
 
     @Override
-    public <T> AsyncFuture<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
+    public <T> AsyncResult<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         Mono<T> mono  = clientUtil.post(url, request, responseType);
-        return new AsyncFuture<T>(mono.toFuture(), url);
+        return new AsyncResult<T>(mono.toFuture(), url);
     }
 
     @Override
-    public <T> AsyncFuture<T> asyncGet(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
+    public <T> AsyncResult<T> asyncGet(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         Mono<T> mono = clientUtil.get(url, request, responseType);
-        return new AsyncFuture<T>(mono.toFuture(), url);
+        return new AsyncResult<T>(mono.toFuture(), url);
     }
 }

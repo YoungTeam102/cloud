@@ -9,7 +9,7 @@ public interface IRestClient {
 
     <T> T get(String serviceName, String serviceUrl, Object request, Class<T> responseType);
 
-    <T> AsyncFuture<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType);
+    <T> AsyncResult<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType);
 
-    <T> AsyncFuture<T> asyncGet(String serviceName, String serviceUrl, Object request, Class<T> responseType);
+    <T> AsyncResult<T> asyncGet(String serviceName, String serviceUrl, Object request, Class<T> responseType);
 }

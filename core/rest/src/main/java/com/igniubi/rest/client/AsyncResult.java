@@ -13,32 +13,23 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-/**
- * <p/>
- */
-public class AsyncFuture<T> {
-    private final static Logger log = LoggerFactory.getLogger(AsyncFuture.class);
 
-
+public class AsyncResult<T> {
+    private final static Logger log = LoggerFactory.getLogger(AsyncResult.class);
     private final Future<T> future;
     private final String serviceName;
-    private final int timeOut = 5;
 
     /**
      * constructor
      */
-    public AsyncFuture(Future<T> future, String serviceName) {
+    public AsyncResult(Future<T> future, String serviceName) {
         this.future = future;
         this.serviceName = serviceName;
     }
 
 
 
-    /**
-     * 获取服务调用结果
-     *
-     * @return 获取服务调用结果
-     */
+
     public T get(int seconds) {
         T t = null;
 
@@ -59,11 +50,7 @@ public class AsyncFuture<T> {
     }
 
 
-    /**
-     * 获取服务调用结果
-     *
-     * @return 获取服务调用结果
-     */
+
     private T innerGet(long waitingSeconds, TimeUnit unit) {
         T t = null;
         try {
@@ -99,11 +86,7 @@ public class AsyncFuture<T> {
     }
 
 
-    /**
-     * 获取服务调用结果
-     *
-     * @return 获取服务调用结果
-     */
+
     public T get() {
         final int defaultTimeout = 5000;
         return this.get(defaultTimeout, TimeUnit.MILLISECONDS);
