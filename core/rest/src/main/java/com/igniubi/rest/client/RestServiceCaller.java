@@ -32,7 +32,7 @@ public class RestServiceCaller implements IRestClient {
         String url = serviceName + serviceUrl;
         AsyncRestCommand<T> command = new AsyncRestCommand<>(restTemplate ,url ,request, responseType);
         Future<T> t = command.excute();
-        return new AsyncFuture<T>(t, url).get();
+        return new AsyncResult<T>(t, url).get();
     }
 
     @Override
@@ -40,22 +40,22 @@ public class RestServiceCaller implements IRestClient {
         String url = serviceName + serviceUrl;
         AsyncRestCommand<T> command = new AsyncRestCommand<>(restTemplate ,url ,request, responseType);
         Future<T> t = command.excuteGet();
-        return new AsyncFuture<T>(t, url).get();
+        return new AsyncResult<T>(t, url).get();
     }
 
     @Override
-    public <T> AsyncFuture<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
+    public <T> AsyncResult<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         AsyncRestCommand<T> command = new AsyncRestCommand<>(restTemplate ,url ,request, responseType);
         Future<T> t = command.excute();
-        return new AsyncFuture<T>(t, url);
+        return new AsyncResult<T>(t, url);
     }
 
     @Override
-    public <T> AsyncFuture<T> asyncGet(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
+    public <T> AsyncResult<T> asyncGet(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         AsyncRestCommand<T> command = new AsyncRestCommand<>(restTemplate ,url ,request, responseType);
         Future<T> t = command.excuteGet();
-        return new AsyncFuture<T>(t, url);
+        return new AsyncResult<T>(t, url);
     }
 }
