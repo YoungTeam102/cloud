@@ -4,25 +4,38 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.igniubi.rest.exception.RestClientErrorHandler;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.http.client.reactive.ReactorResourceFactory;
 import org.springframework.http.converter.*;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
+import reactor.netty.resources.LoopResources;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+
+import static io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS;
+import static io.netty.channel.ChannelOption.TCP_NODELAY;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.igniubi.rest")
+@EnableHystrix
 public class RestApplication {
 
     public static void main(String[] args) {
@@ -79,10 +92,38 @@ public class RestApplication {
     }
 
 
+//    @Bean
+//    public WebClient.Builder webClientBuilder(){
+//        return WebClient.builder();
+//    }
+
+
+    @Bean
+    ReactorResourceFactory resourceFactory() {
+        ReactorResourceFactory factory = new ReactorResourceFactory();
+        factory.setUseGlobalResources(false);
+        factory.setConnectionProvider(ConnectionProvider.fixed("httpClient", 200, 50000));
+        factory.setLoopResources(LoopResources.create("httpClient", 100, true));
+        return factory;
+    }
+
+
     @Bean
     @LoadBalanced
-    public WebClient.Builder webClientBuilder(){
+    WebClient.Builder webClientBuilder() {
+        Function<HttpClient, HttpClient> mapper = client ->
+                client.tcpConfiguration(c ->
+                        c.option(CONNECT_TIMEOUT_MILLIS, 50000)
+                                .option(TCP_NODELAY, true)
+                                .doOnConnected(conn -> {
+                                    conn.addHandlerLast(new ReadTimeoutHandler(50000));
+                                    conn.addHandlerLast(new WriteTimeoutHandler(50000));
+                                }));
 
-        return WebClient.builder();
+        ClientHttpConnector connector =
+                new ReactorClientHttpConnector(resourceFactory(), mapper);
+
+        return WebClient.builder().clientConnector(connector);
     }
+
 }

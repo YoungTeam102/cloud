@@ -16,14 +16,14 @@ public class RedisOperationsUtil {
 
         T t =  operations.get(keyBuilder, c);
 
-        logger.info(" cacheObtain from cache success, key is {} , result is {}" , keyBuilder.getKey() , t);
+        logger.info(" cacheObtain from cache success, key is {} " , keyBuilder.getKey() );
         if(t != null){
             return t;
         }
 
         try {
             t = callable.call();
-            logger.info(" cacheObtain from callable success, key is {} , result is {}" , keyBuilder.getKey() , t);
+            logger.info(" cacheObtain from callable success, key is {}" , keyBuilder.getKey());
         } catch (Exception e) {
             logger.info("cacheObtain error, e is {}", e);
         }

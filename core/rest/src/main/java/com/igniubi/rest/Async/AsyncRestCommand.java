@@ -27,12 +27,12 @@ public class AsyncRestCommand<T> {
         this.restTemplate = restTemplate;
     }
 
-    public Future<T> excute(){
+    public Future<T> execute(){
         Future<T> t= executor.submit(() -> RestTempalteUtil.post(restTemplate,url, request, responseType));
         return t;
     }
 
-    public Future<T> excuteGet(){
+    public Future<T> executeGet(){
         Future<T> t= executor.submit(() -> RestTempalteUtil.get(restTemplate,url, request, responseType));
         return t;
     }

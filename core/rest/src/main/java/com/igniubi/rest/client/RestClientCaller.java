@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.TimeUnit;
+
 
 @Component
 public class RestClientCaller implements IRestClient {
@@ -24,6 +26,13 @@ public class RestClientCaller implements IRestClient {
         String url = serviceName + serviceUrl;
         Mono<T> mono  = clientUtil.post(url, request, responseType);
         return new AsyncResult<T>(mono.toFuture(), url).get();
+    }
+
+    @Override
+    public <T> T call(String serviceName, String serviceUrl, Object request, Class<T> responseType,int timeout) {
+        String url = serviceName + serviceUrl;
+        Mono<T> mono  = clientUtil.post(url, request, responseType);
+        return new AsyncResult<T>(mono.toFuture(), url).get(timeout,TimeUnit.SECONDS);
     }
 
     @Override
