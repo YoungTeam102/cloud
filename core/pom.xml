@@ -64,6 +64,7 @@
         <module>rest</module>
         <module>common</module>
         <module>mybatis</module>
+        <module>zipkin</module>
     </modules>
 
 </project>
