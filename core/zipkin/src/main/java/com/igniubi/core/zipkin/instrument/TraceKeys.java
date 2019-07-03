@@ -28,6 +28,8 @@ public class TraceKeys {
 
 	private Redis redis=new Redis();
 
+	private Mysql mysql = new Mysql();
+
 
 	public Redis getRedis() {
 		return redis;
@@ -40,6 +42,28 @@ public class TraceKeys {
 
 
 	public static class Redis{
+		private String classNameKey = "class";
+
+		private String methodNameKey = "method";
+
+		public String getClassNameKey() {
+			return classNameKey;
+		}
+
+		public String getMethodNameKey() {
+			return methodNameKey;
+		}
+
+		public void setClassNameKey(String classNameKey) {
+			this.classNameKey = classNameKey;
+		}
+
+		public void setMethodNameKey(String methodNameKey) {
+			this.methodNameKey = methodNameKey;
+		}
+	}
+
+	public static class Mysql{
 		private String classNameKey = "class";
 
 		private String methodNameKey = "method";

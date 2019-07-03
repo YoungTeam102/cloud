@@ -1,4 +1,4 @@
-package com.igniubi.core.zipkin.instrument.redis;
+package com.igniubi.core.zipkin.instrument.mysql;
 
 import brave.ScopedSpan;
 import brave.Span;
@@ -8,42 +8,37 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 
 @Aspect
 @Component
-public class TraceRedisAspect {
+public class TraceMysqlAspect {
 
-    private Logger logger = LoggerFactory.getLogger(TraceRedisAspect.class);
-
-    private static final String REDIS_COMPONENT = "redis";
+    private static final String MYSQL_COMPONENT = "mysql";
 
     private final Tracer tracer;
 
     private final TraceKeys traceKeys ;
 
-    public TraceRedisAspect(Tracer tracer, TraceKeys traceKeys) {
+    public TraceMysqlAspect(Tracer tracer, TraceKeys traceKeys) {
         this.tracer = tracer;
         this.traceKeys = traceKeys;
     }
 
-    @Pointcut("execution (* com.igniubi.redis.operations.*.*(..))")
+    @Pointcut("execution (* com.igniubi.*.mapper.*.*(..))")
     private void pointCut() {
     }
 
 
     @Around("pointCut()")
-    public Object traceRedisAround(final ProceedingJoinPoint pjp) throws Throwable {
+    public Object traceMysqlAround(final ProceedingJoinPoint pjp) throws Throwable {
 
-        String className = pjp.getTarget().getClass().getSimpleName();
+        String className = pjp.getSignature().getDeclaringType().getSimpleName();
         String methodName = pjp.getSignature().getName();
-        ScopedSpan span = tracer.startScopedSpan( className + "." + methodName);
-        logger.info("traceRedisAround: {}" , span.context().parentId());
 
-        span.tag("service", REDIS_COMPONENT);
+        ScopedSpan span = tracer.startScopedSpan( className + "." + methodName);
+        span.tag("service", MYSQL_COMPONENT);
         span.tag(traceKeys.getRedis().getClassNameKey(), className);
         span.tag(traceKeys.getRedis().getMethodNameKey(), methodName);
         try {
