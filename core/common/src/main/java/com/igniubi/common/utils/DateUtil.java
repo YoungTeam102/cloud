@@ -6,9 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 
 public class DateUtil {
 	
@@ -424,6 +422,6 @@ public class DateUtil {
 	}
 
 	public static void main(String args[]){
-		System.out.print(getCurrentDayLastSecond() + 365 *24 * 60 *60);
+
 	}
 }

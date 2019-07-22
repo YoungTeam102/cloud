@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.igniubi.core")
+@ComponentScan(basePackages = "com.igniubi")
 @EnableAspectJAutoProxy
 public class ZipkinApplication {
 

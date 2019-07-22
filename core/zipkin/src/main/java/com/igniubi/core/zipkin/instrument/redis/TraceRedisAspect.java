@@ -41,7 +41,6 @@ public class TraceRedisAspect {
         String className = pjp.getTarget().getClass().getSimpleName();
         String methodName = pjp.getSignature().getName();
         ScopedSpan span = tracer.startScopedSpan( className + "." + methodName);
-        logger.info("traceRedisAround: {}" , span.context().parentId());
 
         span.tag("service", REDIS_COMPONENT);
         span.tag(traceKeys.getRedis().getClassNameKey(), className);
