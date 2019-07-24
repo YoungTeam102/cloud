@@ -7,7 +7,6 @@ import java.util.concurrent.*;
 
 public class AsyncRestCommand<T> {
 
-//    private ExecutorService executor = Executors.newFixedThreadPool(10, Executors.defaultThreadFactory()) ;
     private ExecutorService executor = new ThreadPoolExecutor(10, 10,
             0L, TimeUnit.MILLISECONDS,
             new ArrayBlockingQueue<Runnable>(50000),

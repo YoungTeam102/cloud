@@ -1,9 +1,8 @@
 package com.igniubi.core.zipkin.instrument.redis;
 
 import brave.ScopedSpan;
-import brave.Span;
 import brave.Tracer;
-import com.igniubi.core.zipkin.instrument.TraceKeys;
+import com.igniubi.core.zipkin.instrument.TraceEnumKeys;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,9 +22,9 @@ public class TraceRedisAspect {
 
     private final Tracer tracer;
 
-    private final TraceKeys traceKeys ;
+    private final TraceEnumKeys traceKeys ;
 
-    public TraceRedisAspect(Tracer tracer, TraceKeys traceKeys) {
+    public TraceRedisAspect(Tracer tracer, TraceEnumKeys traceKeys) {
         this.tracer = tracer;
         this.traceKeys = traceKeys;
     }
@@ -53,10 +52,6 @@ public class TraceRedisAspect {
         }finally {
             span.finish();
         }
-    }
-
-    protected Span currentSpan() {
-        return this.tracer.currentSpan();
     }
 
 }

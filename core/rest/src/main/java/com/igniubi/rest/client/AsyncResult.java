@@ -4,9 +4,6 @@ import com.igniubi.common.exceptions.IGNBException;
 import com.igniubi.model.enums.common.ResultEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -27,36 +24,25 @@ public class AsyncResult<T> {
         this.serviceName = serviceName;
     }
 
-
-
-
     public T get(int seconds) {
-        T t = null;
-
-        t = this.innerGet(TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS);
-
-
+        T t;
+        t = this.innerGet(TimeUnit.SECONDS.toMillis(seconds));
         return t;
 
     }
-
 
     public T get(int seconds, TimeUnit unit) {
-
-        T t = null;
-        t = this.innerGet(unit.toMillis(seconds), TimeUnit.MILLISECONDS);
-
+        T t;
+        t = this.innerGet(unit.toMillis(seconds));
         return t;
     }
 
 
 
-    private T innerGet(long waitingSeconds, TimeUnit unit) {
-        T t = null;
+    private T innerGet(long waitingSeconds) {
+        T t;
         try {
-                t = this.future.get(waitingSeconds, unit);
-
-            //避免LogUtils.shotter  先执行
+                t = this.future.get(waitingSeconds, TimeUnit.MILLISECONDS);
         } catch (TimeoutException te) {//增加超时异常
             log.warn("call service: {} failed:{} with TimeoutException.", serviceName, te);
             this.future.cancel(true);

@@ -26,7 +26,7 @@ import java.nio.charset.Charset;
 /**
  * RestTemplate异常处理，下面的情况认为是出错了：
  * 1. 调用服务返回不是200 OK 则抛出 {@link HttpClientErrorException} 或者 {@link HttpServerErrorException}
- * 2. 调用服务返回200 OK，但是响应头中有一个自定义的:x-yh-service-error-code, ，则抛出 {@link IGNBException}
+ * 2. 调用服务返回200 OK，但是响应头中有一个自定义的:x-service-error-code, ，则抛出 {@link IGNBException}
  */
 public class RestClientErrorHandler implements ResponseErrorHandler {
 

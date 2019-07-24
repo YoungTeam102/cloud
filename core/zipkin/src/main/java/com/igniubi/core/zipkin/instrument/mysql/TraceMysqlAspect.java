@@ -3,7 +3,7 @@ package com.igniubi.core.zipkin.instrument.mysql;
 import brave.ScopedSpan;
 import brave.Span;
 import brave.Tracer;
-import com.igniubi.core.zipkin.instrument.TraceKeys;
+import com.igniubi.core.zipkin.instrument.TraceEnumKeys;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,9 +19,9 @@ public class TraceMysqlAspect {
 
     private final Tracer tracer;
 
-    private final TraceKeys traceKeys ;
+    private final TraceEnumKeys traceKeys ;
 
-    public TraceMysqlAspect(Tracer tracer, TraceKeys traceKeys) {
+    public TraceMysqlAspect(Tracer tracer, TraceEnumKeys traceKeys) {
         this.tracer = tracer;
         this.traceKeys = traceKeys;
     }

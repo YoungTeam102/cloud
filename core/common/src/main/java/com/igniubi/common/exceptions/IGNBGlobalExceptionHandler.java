@@ -26,7 +26,7 @@ import java.util.Optional;
 /**
  *
  * 服务的全局异常处理
- * 1. 返回200，并且用json作为消息体，并且设置消息头（方便resttemplate处理）
+ * 1. 返回200，并且用json作为消息体，并且设置消息头
  * 2. 返回500，设置消息头
  *  服务的全局异常处理（webclient）
  *  1. ignbexception 返回500，设置消息头(x-service-error-code). webclient 处理http500时，先判断是否有该消息头

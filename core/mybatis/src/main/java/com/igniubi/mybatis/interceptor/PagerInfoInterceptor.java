@@ -34,7 +34,7 @@ import java.util.*;
 )})
 public class PagerInfoInterceptor implements Interceptor {
     private static final Logger LOGGER = LoggerFactory.getLogger(PagerInfoInterceptor.class);
-    private static final List<ResultMapping> EMPTY_RESULT_MAPPING = new ArrayList(0);
+    private static final List<ResultMapping> EMPTY_RESULT_MAPPING = new ArrayList<>(0);
     private static final String SQL_FROM = "FROM";
     private static final String SQL_COUNT = "SELECT COUNT(0) FROM ";
     private Field additionalParametersField;
@@ -66,21 +66,18 @@ public class PagerInfoInterceptor implements Interceptor {
 
             PagerInfo pager = this.getPagerInfo();
             if (pager == null) {
-                Object var22 = invocation.proceed();
-                return var22;
+                return invocation.proceed();
             }
 
             Map<String, Object> additionalParameters = (Map)this.additionalParametersField.get(boundSql);
             Long count = this.getCount(pager, boundSql, executor, ms, parameter, additionalParameters, resultHandler);
-            if (count.longValue() > 0L) {
+            if (count > 0L) {
                 pager.setTotal(count.intValue());
                 String pageSql = this.getPageSql(pager, boundSql.getSql(), cacheKey);
                 BoundSql pageBound = new BoundSql(ms.getConfiguration(), pageSql, boundSql.getParameterMappings(), parameter);
-                Iterator var17 = additionalParameters.keySet().iterator();
 
-                while(var17.hasNext()) {
-                    String key = (String)var17.next();
-                    pageBound.setAdditionalParameter(key, additionalParameters.get(key));
+                for (Object key : additionalParameters.keySet()) {
+                    pageBound.setAdditionalParameter((String)key, additionalParameters.get(key));
                 }
 
                 resultList = executor.query(ms, parameter, RowBounds.DEFAULT, resultHandler, cacheKey, pageBound);
@@ -188,8 +185,7 @@ public class PagerInfoInterceptor implements Interceptor {
             String[] var4 = ms.getKeyProperties();
             int var5 = var4.length;
 
-            for(int var6 = 0; var6 < var5; ++var6) {
-                String keyProperty = var4[var6];
+            for (String keyProperty : var4) {
                 keyProperties.append(keyProperty).append(",");
             }
 
@@ -199,7 +195,7 @@ public class PagerInfoInterceptor implements Interceptor {
 
         builder.timeout(ms.getTimeout());
         builder.parameterMap(ms.getParameterMap());
-        List<ResultMap> resultMaps = new ArrayList();
+        List<ResultMap> resultMaps = new ArrayList<>();
         ResultMap resultMap = (new org.apache.ibatis.mapping.ResultMap.Builder(ms.getConfiguration(), ms.getId(), Long.class, EMPTY_RESULT_MAPPING)).build();
         resultMaps.add(resultMap);
         builder.resultMaps(resultMaps);
@@ -231,18 +227,16 @@ public class PagerInfoInterceptor implements Interceptor {
 
         CacheKey countKey = executor.createCacheKey(ms, parameter, RowBounds.DEFAULT, boundSql);
         countKey.update("_Count");
-        Iterator var12 = additionalParameters.keySet().iterator();
 
-        while(var12.hasNext()) {
-            String key = (String)var12.next();
-            countBoundSql.setAdditionalParameter(key, additionalParameters.get(key));
+        for (Object key : additionalParameters.keySet()) {
+            countBoundSql.setAdditionalParameter((String)key, additionalParameters.get(key));
         }
 
         Object countResultObj = executor.query(countMappedStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey, countBoundSql);
         Long count = 0L;
         if (countResultObj != null) {
             List countResultList = (List)countResultObj;
-            if (countResultList != null && countResultList.size() > 0 && countResultList.get(0) != null) {
+            if (countResultList.size() > 0 && countResultList.get(0) != null) {
                 count = (Long)countResultList.get(0);
             }
         }

@@ -2,7 +2,7 @@ package com.igniubi.redis.util;
 
 
 /**
- * 描述:Redis 缓存的统一Key的构建类。
+ * 描述:Redis 缓存的统一Key
  */
 public class RedisKeyBuilder {
 
@@ -27,9 +27,8 @@ public class RedisKeyBuilder {
     private String innerKeyTemplate;
 
 
-    public static final String SEPARATOR_MH = ":";
+    private static final String SEPARATOR_MH = ":";
 
-    public static final String SEPARATOR_JH = "#";
 
     private static final String PLACEHOLDER = "{}";
 
