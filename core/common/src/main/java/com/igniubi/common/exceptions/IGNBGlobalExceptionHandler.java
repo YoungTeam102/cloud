@@ -85,7 +85,7 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
         String errorMessage = null;
         List<ObjectError> errors = ex.getBindingResult().getAllErrors();
         if (errors.size() > 0) {
-            errorMessage = ((ObjectError)errors.get(0)).getDefaultMessage();
+            errorMessage = errors.get(0).getDefaultMessage();
         }
         //add header
         httpServletResponse.setCharacterEncoding("UTF-8");
