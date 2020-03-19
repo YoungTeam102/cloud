@@ -15,9 +15,8 @@ public class RedisOperationsUtil {
         RedisKeyBuilder keyBuilder = RedisKeyBuilder.newInstance().appendFixed(keyEnum.getCacheKey()).appendVar(key);
 
         T t = operations.get(keyBuilder, c);
-
-        logger.info(" cacheObtain from cache success, key is {} ", keyBuilder.getKey());
         if (t != null) {
+            logger.info(" cacheObtain from cache success, key is {} ", keyBuilder.getKey());
             return t;
         }
 
