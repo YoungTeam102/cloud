@@ -59,7 +59,7 @@ public class RestApplication {
         mediaTypes.add(MediaType.parseMediaType(MediaType.TEXT_PLAIN_VALUE));
         mediaTypes.add(MediaType.parseMediaType(MediaType.TEXT_XML_VALUE));
 
-        StringHttpMessageConverter stringHttpMessageConverter =  new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         stringHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
         converters.add(stringHttpMessageConverter);
         converters.add(new ResourceHttpMessageConverter());

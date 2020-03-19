@@ -29,6 +29,7 @@ public class DateUtils {
 
     /**
      * 获取当前时间
+     *
      * @param format 日期格式
      * @return String
      * @author ：迈克擂
@@ -40,7 +41,7 @@ public class DateUtils {
             SimpleDateFormat dateFormat = new SimpleDateFormat(format == null ? "yyyy-MM-dd HH:mm:ss" : format);
             formatDate = dateFormat.format(new Date());
         } catch (Exception e) {
-            log.error("日期格式转化异常",e);
+            log.error("日期格式转化异常", e);
             return null;
         }
         return formatDate;
@@ -49,13 +50,14 @@ public class DateUtils {
     /**
      * 字符串转日期
      * <p>
+     *
      * @param dateStr 待转换的日期字符串
-     * @param format 待转换的日期字符串格式
+     * @param format  待转换的日期字符串格式
      * @return Date
      * @author ：迈克擂
      * @date ：2018/12/5
      */
-    public static Date getDateByStr(String dateStr,String format) {
+    public static Date getDateByStr(String dateStr, String format) {
         try {
             return new SimpleDateFormat(format).parse(dateStr);
         } catch (ParseException e) {
@@ -67,8 +69,9 @@ public class DateUtils {
     /**
      * 日期加减天数
      * <p>
+     *
      * @param date 日期
-     * @param days  加减天数 正为加，负为减
+     * @param days 加减天数 正为加，负为减
      * @return Date
      * @author ：迈克擂
      * @date ：2018/12/5
@@ -83,8 +86,9 @@ public class DateUtils {
     /**
      * 日期加减天数
      * <p>
-     * @param date 日期
-     * @param days  加减天数 正为加，负为减
+     *
+     * @param date       日期
+     * @param days       加减天数 正为加，负为减
      * @param dateFormat 格式化 默认为 yyyy-MM-dd HH:mm:ss
      * @return String
      * @throws
@@ -92,7 +96,7 @@ public class DateUtils {
      * @date ：2018/12/5
      */
     public static String plusDate(Date date, int days, String dateFormat) {
-        if(StringUtils.isBlank(dateFormat)){
+        if (StringUtils.isBlank(dateFormat)) {
             dateFormat = FORMAT_NORMAL;
         }
         SimpleDateFormat df = new SimpleDateFormat(dateFormat);

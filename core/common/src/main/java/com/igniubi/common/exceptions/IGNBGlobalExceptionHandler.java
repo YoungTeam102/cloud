@@ -24,14 +24,13 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- *
  * 服务的全局异常处理
  * 1. 返回200，并且用json作为消息体，并且设置消息头
  * 2. 返回500，设置消息头
- *  服务的全局异常处理（webclient）
- *  1. ignbexception 返回500，设置消息头(x-service-error-code). webclient 处理http500时，先判断是否有该消息头
- *  2. 非ignbexception，不设置头
- *  3. 验参异常，同1
+ * 服务的全局异常处理（webclient）
+ * 1. ignbexception 返回500，设置消息头(x-service-error-code). webclient 处理http500时，先判断是否有该消息头
+ * 2. 非ignbexception，不设置头
+ * 3. 验参异常，同1
  */
 @Component
 @ControllerAdvice
@@ -39,11 +38,9 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
 
-
     //如果服务异常，需要把异常信息加入到头中
     public static String HEADER_ERROR_CODE = "x-service-error-code";
     public static String HEADER_ERROR_MESSAGE = "x-service-error-message";
-
 
 
     @Override
@@ -55,12 +52,12 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
             logger.error("unknown exception happened at:{}", httpServletRequest.getRequestURI());
             logger.error("unknown exception is ", exception);
             httpServletResponse.setStatus(500);
-            addHeadWithISO(httpServletResponse,exception.getMessage() );
+            addHeadWithISO(httpServletResponse, exception.getMessage());
 
             return new ModelAndView();
         }
         //处理服务异常。 需要添加异常信息到头中，并且返回json
-        IGNBException se =  (IGNBException) exception;
+        IGNBException se = (IGNBException) exception;
         int code = se.getCode();
         String message = se.getMessage();
         //add header
@@ -69,7 +66,7 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
         addHeadWithISO(httpServletResponse, message);
 
         //如果是服务不可用，直接返回500，并且打印异常
-        if ( code == ResultEnum.SERVICE_NOT_AVAILABLE.getCode()) {
+        if (code == ResultEnum.SERVICE_NOT_AVAILABLE.getCode()) {
             logger.error("service not available exception happened at:{}", httpServletRequest.getRequestURI());
             httpServletResponse.setStatus(500);
             addHeadWithISO(httpServletResponse, message);
@@ -81,7 +78,7 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
 
     @ExceptionHandler({MethodArgumentNotValidException.class, MissingServletRequestParameterException.class})
     @ResponseBody
-    public ModelAndView handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request,HttpServletResponse httpServletResponse) throws UnsupportedEncodingException {
+    public ModelAndView handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request, HttpServletResponse httpServletResponse) throws UnsupportedEncodingException {
         String errorMessage = null;
         List<ObjectError> errors = ex.getBindingResult().getAllErrors();
         if (errors.size() > 0) {
@@ -116,12 +113,11 @@ public class IGNBGlobalExceptionHandler implements HandlerExceptionResolver {
         try {
             String msg = Optional.ofNullable(message).orElse("");
             httpServletResponse.addHeader(HEADER_ERROR_MESSAGE, new String(
-                    msg.getBytes("UTF-8"),"ISO8859-1"));
+                    msg.getBytes("UTF-8"), "ISO8859-1"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
-
 
 
 }

@@ -36,7 +36,7 @@ import javax.sql.DataSource;
 @AutoConfigureBefore({DataSourceAutoConfiguration.class})
 @ConditionalOnBean(MasterDataSourceConfigurer.class)
 @MapperScan(value = "com.igniubi.*.mapper",
-  sqlSessionFactoryRef="masterSqlSessionFactory")
+        sqlSessionFactoryRef = "masterSqlSessionFactory")
 
 public class MasterMybatisDatasource {
     private static final Logger LOGGER = LoggerFactory.getLogger(MasterMybatisDatasource.class);
@@ -49,7 +49,7 @@ public class MasterMybatisDatasource {
 
     @Primary
     @Bean(
-        name = {"masterSqlSessionFactory"}
+            name = {"masterSqlSessionFactory"}
     )
     public SqlSessionFactory masterSqlSessionFactory(@Qualifier("masterDataSource") DataSource dataSource) throws Exception {
         LOGGER.info("====== masterSqlSessionFactory init ======");
@@ -68,7 +68,7 @@ public class MasterMybatisDatasource {
 
     @Primary
     @Bean(
-        name = {"masterDataSource"}
+            name = {"masterDataSource"}
     )
     public DataSource masterDataSource() {
         LOGGER.info("====== masterDataSource init ======");
@@ -90,7 +90,7 @@ public class MasterMybatisDatasource {
 
     @Primary
     @Bean(
-        name = {"masterTransactionManager"}
+            name = {"masterTransactionManager"}
     )
     public DataSourceTransactionManager masterTransactionManager() {
         return new DataSourceTransactionManager(this.masterDataSource());

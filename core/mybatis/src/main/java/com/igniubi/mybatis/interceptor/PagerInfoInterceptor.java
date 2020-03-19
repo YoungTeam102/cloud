@@ -44,6 +44,7 @@ public class PagerInfoInterceptor implements Interceptor {
 
     /**
      * 拦截操作
+     *
      * @param invocation
      * @return
      * @throws Throwable
@@ -53,11 +54,11 @@ public class PagerInfoInterceptor implements Interceptor {
         Object var14;
         try {
             Object[] args = invocation.getArgs();
-            MappedStatement ms = (MappedStatement)args[0];
+            MappedStatement ms = (MappedStatement) args[0];
             Object parameter = args[1];
-            RowBounds rowBounds = (RowBounds)args[2];
-            ResultHandler resultHandler = (ResultHandler)args[3];
-            Executor executor = (Executor)invocation.getTarget();
+            RowBounds rowBounds = (RowBounds) args[2];
+            ResultHandler resultHandler = (ResultHandler) args[3];
+            Executor executor = (Executor) invocation.getTarget();
             List resultList = null;
             CacheKey cacheKey;
             BoundSql boundSql;
@@ -69,7 +70,7 @@ public class PagerInfoInterceptor implements Interceptor {
                 return invocation.proceed();
             }
 
-            Map<String, Object> additionalParameters = (Map)this.additionalParametersField.get(boundSql);
+            Map<String, Object> additionalParameters = (Map) this.additionalParametersField.get(boundSql);
             Long count = this.getCount(pager, boundSql, executor, ms, parameter, additionalParameters, resultHandler);
             if (count > 0L) {
                 pager.setTotal(count.intValue());
@@ -77,7 +78,7 @@ public class PagerInfoInterceptor implements Interceptor {
                 BoundSql pageBound = new BoundSql(ms.getConfiguration(), pageSql, boundSql.getParameterMappings(), parameter);
 
                 for (Object key : additionalParameters.keySet()) {
-                    pageBound.setAdditionalParameter((String)key, additionalParameters.get(key));
+                    pageBound.setAdditionalParameter((String) key, additionalParameters.get(key));
                 }
 
                 resultList = executor.query(ms, parameter, RowBounds.DEFAULT, resultHandler, cacheKey, pageBound);
@@ -86,7 +87,7 @@ public class PagerInfoInterceptor implements Interceptor {
                 resultList = new ArrayList(0);
             }
 
-            pager.setList((List)resultList);
+            pager.setList((List) resultList);
             var14 = resultList;
         } finally {
             PagerHelper.clearPage();
@@ -229,15 +230,15 @@ public class PagerInfoInterceptor implements Interceptor {
         countKey.update("_Count");
 
         for (Object key : additionalParameters.keySet()) {
-            countBoundSql.setAdditionalParameter((String)key, additionalParameters.get(key));
+            countBoundSql.setAdditionalParameter((String) key, additionalParameters.get(key));
         }
 
         Object countResultObj = executor.query(countMappedStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey, countBoundSql);
         Long count = 0L;
         if (countResultObj != null) {
-            List countResultList = (List)countResultObj;
+            List countResultList = (List) countResultObj;
             if (countResultList.size() > 0 && countResultList.get(0) != null) {
-                count = (Long)countResultList.get(0);
+                count = (Long) countResultList.get(0);
             }
         }
 

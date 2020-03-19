@@ -3,77 +3,75 @@ package com.igniubi.core.zipkin.instrument;
 import org.springframework.stereotype.Component;
 
 
-
-
 @Component
 public class TraceEnumKeys {
 
-	private Redis redis=new Redis();
+    private Redis redis = new Redis();
 
-	private Mysql mysql = new Mysql();
-
-
-	public Redis getRedis() {
-		return redis;
-	}
+    private Mysql mysql = new Mysql();
 
 
-	public void setRedis(Redis redis) {
-		this.redis = redis;
-	}
-
-	public Mysql getMysql() {
-		return mysql;
-	}
-
-	public void setMysql(Mysql mysql) {
-		this.mysql = mysql;
-	}
+    public Redis getRedis() {
+        return redis;
+    }
 
 
-	public static class Redis{
-		private String classNameKey = "class";
+    public void setRedis(Redis redis) {
+        this.redis = redis;
+    }
 
-		private String methodNameKey = "method";
+    public Mysql getMysql() {
+        return mysql;
+    }
 
-		public String getClassNameKey() {
-			return classNameKey;
-		}
+    public void setMysql(Mysql mysql) {
+        this.mysql = mysql;
+    }
 
-		public String getMethodNameKey() {
-			return methodNameKey;
-		}
 
-		public void setClassNameKey(String classNameKey) {
-			this.classNameKey = classNameKey;
-		}
+    public static class Redis {
+        private String classNameKey = "class";
 
-		public void setMethodNameKey(String methodNameKey) {
-			this.methodNameKey = methodNameKey;
-		}
-	}
+        private String methodNameKey = "method";
 
-	public static class Mysql{
-		private String classNameKey = "class";
+        public String getClassNameKey() {
+            return classNameKey;
+        }
 
-		private String methodNameKey = "method";
+        public String getMethodNameKey() {
+            return methodNameKey;
+        }
 
-		public String getClassNameKey() {
-			return classNameKey;
-		}
+        public void setClassNameKey(String classNameKey) {
+            this.classNameKey = classNameKey;
+        }
 
-		public String getMethodNameKey() {
-			return methodNameKey;
-		}
+        public void setMethodNameKey(String methodNameKey) {
+            this.methodNameKey = methodNameKey;
+        }
+    }
 
-		public void setClassNameKey(String classNameKey) {
-			this.classNameKey = classNameKey;
-		}
+    public static class Mysql {
+        private String classNameKey = "class";
 
-		public void setMethodNameKey(String methodNameKey) {
-			this.methodNameKey = methodNameKey;
-		}
-	}
+        private String methodNameKey = "method";
+
+        public String getClassNameKey() {
+            return classNameKey;
+        }
+
+        public String getMethodNameKey() {
+            return methodNameKey;
+        }
+
+        public void setClassNameKey(String classNameKey) {
+            this.classNameKey = classNameKey;
+        }
+
+        public void setMethodNameKey(String methodNameKey) {
+            this.methodNameKey = methodNameKey;
+        }
+    }
 
 
 }

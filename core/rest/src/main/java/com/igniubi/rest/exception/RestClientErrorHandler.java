@@ -37,34 +37,34 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
         HttpStatus statusCode = getHttpStatusCode(response);
         switch (statusCode.series()) {
 
-            case CLIENT_ERROR:{
-                if(getServiceErrorCode(response) > 0){
-                    IGNBException se =  new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
-                    log.info("service call with service exception: {}",  se.getMessage());
-                    throw  se;
+            case CLIENT_ERROR: {
+                if (getServiceErrorCode(response) > 0) {
+                    IGNBException se = new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
+                    log.info("service call with service exception: {}", se.getMessage());
+                    throw se;
                 }
                 HttpClientErrorException ex = new HttpClientErrorException(statusCode, response.getStatusText(),
                         response.getHeaders(), getResponseBody(response), getCharset(response));
-                log.error("service call client error",  ex);
+                log.error("service call client error", ex);
                 throw ex;
             }
 
             case SERVER_ERROR: {
-                if(getServiceErrorCode(response) > 0){
-                    IGNBException se =  new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
-                    log.info("service call with service exception: {}",  se.getMessage());
-                    throw  se;
+                if (getServiceErrorCode(response) > 0) {
+                    IGNBException se = new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
+                    log.info("service call with service exception: {}", se.getMessage());
+                    throw se;
                 }
                 HttpServerErrorException ex = new HttpServerErrorException(statusCode, response.getStatusText(),
                         response.getHeaders(), getResponseBody(response), getCharset(response));
-                log.error("service call server error",  ex);
+                log.error("service call server error", ex);
                 throw ex;
             }
 
             default: {
-                IGNBException se =  new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
-                log.info("service call with service exception: {}",  se.getMessage());
-                throw  se;
+                IGNBException se = new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
+                log.info("service call with service exception: {}", se.getMessage());
+                throw se;
             }
         }
 
@@ -75,24 +75,24 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
 
         int errorCode = this.getServiceErrorCode(response);
 
-        HttpStatus statusCode= getHttpStatusCode(response);
-        return  (errorCode>0) || (statusCode.series() == HttpStatus.Series.CLIENT_ERROR ||
-                statusCode.series() == HttpStatus.Series.SERVER_ERROR) ;
+        HttpStatus statusCode = getHttpStatusCode(response);
+        return (errorCode > 0) || (statusCode.series() == HttpStatus.Series.CLIENT_ERROR ||
+                statusCode.series() == HttpStatus.Series.SERVER_ERROR);
     }
 
-    private int getServiceErrorCode(ClientHttpResponse response){
-        String header =  response.getHeaders().getFirst(IGNBGlobalExceptionHandler.HEADER_ERROR_CODE);
-        if(StringUtils.isNotEmpty(header)){
+    private int getServiceErrorCode(ClientHttpResponse response) {
+        String header = response.getHeaders().getFirst(IGNBGlobalExceptionHandler.HEADER_ERROR_CODE);
+        if (StringUtils.isNotEmpty(header)) {
             return Integer.parseInt(header);
         }
         return 0;
     }
 
-    private String getServiceErrorMessage(ClientHttpResponse response){
-        String header =  response.getHeaders().getFirst(IGNBGlobalExceptionHandler.HEADER_ERROR_MESSAGE);
-        if(StringUtils.isNotEmpty(header)){
+    private String getServiceErrorMessage(ClientHttpResponse response) {
+        String header = response.getHeaders().getFirst(IGNBGlobalExceptionHandler.HEADER_ERROR_MESSAGE);
+        if (StringUtils.isNotEmpty(header)) {
             try {
-                header = new String(header.getBytes("ISO8859-1"),"UTF-8");
+                header = new String(header.getBytes("ISO8859-1"), "UTF-8");
                 return header;
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -106,8 +106,7 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
         HttpStatus statusCode;
         try {
             statusCode = response.getStatusCode();
-        }
-        catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             throw new UnknownHttpStatusCodeException(response.getRawStatusCode(),
                     response.getStatusText(), response.getHeaders(), getResponseBody(response), getCharset(response));
         }
@@ -118,8 +117,7 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
         try {
             InputStream responseBody = response.getBody();
             return FileCopyUtils.copyToByteArray(responseBody);
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             // ignore
         }
         return new byte[0];
@@ -130,7 +128,6 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
         MediaType contentType = headers.getContentType();
         return contentType != null ? contentType.getCharset() : null;
     }
-
 
 
 }

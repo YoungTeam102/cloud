@@ -38,11 +38,10 @@ public class AsyncResult<T> {
     }
 
 
-
     private T innerGet(long waitingSeconds) {
         T t;
         try {
-                t = this.future.get(waitingSeconds, TimeUnit.MILLISECONDS);
+            t = this.future.get(waitingSeconds, TimeUnit.MILLISECONDS);
         } catch (TimeoutException te) {//增加超时异常
             log.warn("call service: {} failed:{} with TimeoutException.", serviceName, te);
             this.future.cancel(true);
@@ -52,7 +51,7 @@ public class AsyncResult<T> {
             throw new IGNBException(ResultEnum.SERVICE_NOT_AVAILABLE);
         } catch (Exception ex) {
             if (ex instanceof ExecutionException) {
-                if (ex.getCause() instanceof IGNBException ) {
+                if (ex.getCause() instanceof IGNBException) {
                     IGNBException se = (IGNBException) (ex.getCause());
                     log.info("call service: {}, return: {} success.", serviceName, se.getMessage());
                     throw se;
@@ -62,15 +61,13 @@ public class AsyncResult<T> {
                     log.warn("call service: {} failed with exception.", serviceName, ex);
                     throw new IGNBException(ResultEnum.SERVICE_NOT_AVAILABLE);
                 }
-            }
-            else {
+            } else {
                 log.warn("call service: {} failed with exception.", serviceName, ex);
                 throw new IGNBException(ResultEnum.SERVICE_NOT_AVAILABLE);
             }
         }
         return t;
     }
-
 
 
     public T get() {

@@ -20,7 +20,7 @@ import java.util.concurrent.Executor;
 
 @Component
 @Deprecated
-public class RestTempalteUtil  {
+public class RestTempalteUtil {
 
 
     public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
@@ -41,7 +41,7 @@ public class RestTempalteUtil  {
         return t;
     }
 
-    public static <T> T post(RestTemplate template,String url, Object request, Class<T> responseType) {
+    public static <T> T post(RestTemplate template, String url, Object request, Class<T> responseType) {
         MultiValueMap<String, String> headers = setupPostHeaders(request);
         HttpEntity<Object> requestEntity = new HttpEntity<>(request, headers);
         T t = template.postForObject(url, requestEntity, responseType);

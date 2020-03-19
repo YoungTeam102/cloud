@@ -15,9 +15,9 @@ import java.util.Map;
 public class WebClientUtil {
 
     @Autowired
-    private  WebClient.Builder webClientBuilder;
+    private WebClient.Builder webClientBuilder;
 
-    public <T> Mono<T> get(String url, Object request, Class<T> responseType){
+    public <T> Mono<T> get(String url, Object request, Class<T> responseType) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         Map<String, ?> params = (Map<String, ?>) request;
         if (params != null && params.size() > 0) {
@@ -26,11 +26,11 @@ public class WebClientUtil {
             }
         }
         final URI getURI = builder.build().encode().toUri();
-        Mono<T> mono  = webClientBuilder.build().get().uri(getURI).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
+        Mono<T> mono = webClientBuilder.build().get().uri(getURI).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
         return mono;
     }
 
-    public <T> T getEntity(String url, Object request, Class<T> responseType){
+    public <T> T getEntity(String url, Object request, Class<T> responseType) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         Map<String, ?> params = (Map<String, ?>) request;
         if (params != null && params.size() > 0) {
@@ -39,17 +39,17 @@ public class WebClientUtil {
             }
         }
         final URI getURI = builder.build().encode().toUri();
-        Mono<T> mono  =  webClientBuilder.build().get().uri(getURI).retrieve().onStatus(HttpStatus::isError,WebClientErrorHandler::handleError).bodyToMono(responseType);
+        Mono<T> mono = webClientBuilder.build().get().uri(getURI).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
         return mono.block();
     }
 
-    public <T> Mono<T> post(String url, Object request, Class<T> responseType){
-        Mono<T> mono  =   webClientBuilder.build().post().uri(url).syncBody(request).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
+    public <T> Mono<T> post(String url, Object request, Class<T> responseType) {
+        Mono<T> mono = webClientBuilder.build().post().uri(url).syncBody(request).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
         return mono;
     }
 
-    public <T> T postEntity(String url, Object request, Class<T> responseType){
-        Mono<T> mono  =  webClientBuilder.build().post().uri(url).syncBody(request).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
+    public <T> T postEntity(String url, Object request, Class<T> responseType) {
+        Mono<T> mono = webClientBuilder.build().post().uri(url).syncBody(request).retrieve().onStatus(HttpStatus::isError, WebClientErrorHandler::handleError).bodyToMono(responseType);
         return mono.block();
     }
 }

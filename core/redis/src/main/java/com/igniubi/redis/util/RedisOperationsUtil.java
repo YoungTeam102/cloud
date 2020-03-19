@@ -11,24 +11,24 @@ public class RedisOperationsUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisOperationsUtil.class);
 
-    public   static  <T> T cacheObtain(RedisValueOperations operations , RedisKeyEnum keyEnum, Object key, Callable<T> callable, Class<T> c){
+    public static <T> T cacheObtain(RedisValueOperations operations, RedisKeyEnum keyEnum, Object key, Callable<T> callable, Class<T> c) {
         RedisKeyBuilder keyBuilder = RedisKeyBuilder.newInstance().appendFixed(keyEnum.getCacheKey()).appendVar(key);
 
-        T t =  operations.get(keyBuilder, c);
+        T t = operations.get(keyBuilder, c);
 
-        logger.info(" cacheObtain from cache success, key is {} " , keyBuilder.getKey() );
-        if(t != null){
+        logger.info(" cacheObtain from cache success, key is {} ", keyBuilder.getKey());
+        if (t != null) {
             return t;
         }
 
         try {
             t = callable.call();
-            logger.info(" cacheObtain from callable success, key is {}" , keyBuilder.getKey());
+            logger.info(" cacheObtain from callable success, key is {}", keyBuilder.getKey());
         } catch (Exception e) {
             logger.info("cacheObtain error, e is {}", e);
         }
 
-        if(t != null ){
+        if (t != null) {
             operations.set(keyBuilder, t, keyEnum.getCacheTime(), keyEnum.getTimeUnit());
         }
 

@@ -20,7 +20,7 @@ public class PagerHelper {
     }
 
     public static <T> PagerInfo<T> getLocalPage() {
-        return (PagerInfo)LOCAL_PAGE.get();
+        return (PagerInfo) LOCAL_PAGE.get();
     }
 
     public static void clearPage() {

@@ -11,7 +11,7 @@ import com.igniubi.model.enums.common.ResultEnum;
  * @version 1.0.0
  * @date 2018-12-5
  */
-public class IGNBException extends RuntimeException{
+public class IGNBException extends RuntimeException {
 
     private final int code;
 

@@ -19,20 +19,20 @@ public class AsyncRestCommand<T> {
     private final Object request;
     private final Class<T> responseType;
 
-    public AsyncRestCommand(RestTemplate restTemplate,String url, Object request, Class<T> responseType) {
+    public AsyncRestCommand(RestTemplate restTemplate, String url, Object request, Class<T> responseType) {
         this.url = url;
         this.request = request;
         this.responseType = responseType;
         this.restTemplate = restTemplate;
     }
 
-    public Future<T> execute(){
-        Future<T> t= executor.submit(() -> RestTempalteUtil.post(restTemplate,url, request, responseType));
+    public Future<T> execute() {
+        Future<T> t = executor.submit(() -> RestTempalteUtil.post(restTemplate, url, request, responseType));
         return t;
     }
 
-    public Future<T> executeGet(){
-        Future<T> t= executor.submit(() -> RestTempalteUtil.get(restTemplate,url, request, responseType));
+    public Future<T> executeGet() {
+        Future<T> t = executor.submit(() -> RestTempalteUtil.get(restTemplate, url, request, responseType));
         return t;
     }
 

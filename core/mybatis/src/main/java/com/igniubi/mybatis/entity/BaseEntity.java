@@ -11,6 +11,6 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2018-12-6
  */
-public class BaseEntity implements Serializable{
+public class BaseEntity implements Serializable {
 
 }

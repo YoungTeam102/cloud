@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class RedisValueOperations{
+public class RedisValueOperations {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisValueOperations.class);
 
-    private  RedisTemplate<String, String> stringRedisTemplate;
+    private RedisTemplate<String, String> stringRedisTemplate;
 
     private ValueOperations<String, String> valueOperations;
 
@@ -28,11 +28,12 @@ public class RedisValueOperations{
         this.stringRedisTemplate = stringRedisTemplate;
         valueOperations = stringRedisTemplate.opsForValue();
     }
+
     public <T> T get(RedisKeyBuilder keyBuilder, Class<T> tClass) {
         String result;
         T t = null;
         try {
-            result =valueOperations.get(keyBuilder.getKey());
+            result = valueOperations.get(keyBuilder.getKey());
             t = JSONObject.parseObject(result, tClass);
         } catch (Exception e) {
             logger.warn("RedisUtil get error, key is {}, e is {}", keyBuilder.getKey(), e);
@@ -42,7 +43,7 @@ public class RedisValueOperations{
 
     public <T> List<T> getList(RedisKeyBuilder keyBuilder, Class<T> clazz) {
         try {
-            String result =valueOperations.get(keyBuilder.getKey());
+            String result = valueOperations.get(keyBuilder.getKey());
             return JSON.parseArray(result, clazz);
         } catch (Exception e) {
             logger.warn("RedisUtil getList error, key is {}, e is {}", keyBuilder.getKey(), e);
@@ -52,7 +53,7 @@ public class RedisValueOperations{
 
     public void set(RedisKeyBuilder keyBuilder, Object value, long timeout, TimeUnit unit) {
         try {
-            valueOperations.set(keyBuilder.getKey(), JSON.toJSONString(value), timeout, unit );
+            valueOperations.set(keyBuilder.getKey(), JSON.toJSONString(value), timeout, unit);
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }

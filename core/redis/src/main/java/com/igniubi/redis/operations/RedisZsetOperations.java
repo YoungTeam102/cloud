@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
-public class RedisZsetOperations{
+public class RedisZsetOperations {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisZsetOperations.class);
 
@@ -64,10 +64,10 @@ public class RedisZsetOperations{
     }
 
     public <T> Double incrementScore(RedisKeyBuilder keyBuilder, T o, long score) {
-        Double result =null;
+        Double result = null;
         try {
             String value = SerializeUtils.value2String(o);
-            result= zSetOperations.incrementScore(keyBuilder.getKey(), value, score);
+            result = zSetOperations.incrementScore(keyBuilder.getKey(), value, score);
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }
@@ -79,8 +79,8 @@ public class RedisZsetOperations{
         Set<String> result = null;
         Set<T> v = null;
         try {
-            result= zSetOperations.range(keyBuilder.getKey(), start,  end);
-            if(result == null){
+            result = zSetOperations.range(keyBuilder.getKey(), start, end);
+            if (result == null) {
                 return null;
             }
             v = result.stream().map(s -> SerializeUtils.string2Value(s, aClass)).collect(Collectors.toSet());
@@ -94,8 +94,8 @@ public class RedisZsetOperations{
         Set<String> result = null;
         Set<T> v = null;
         try {
-            result= zSetOperations.rangeByScore(keyBuilder.getKey(), min,  max);
-            if(result == null){
+            result = zSetOperations.rangeByScore(keyBuilder.getKey(), min, max);
+            if (result == null) {
                 return null;
             }
             v = result.stream().map(s -> SerializeUtils.string2Value(s, aClass)).collect(Collectors.toSet());
@@ -108,8 +108,8 @@ public class RedisZsetOperations{
     public Set<ZSetOperations.TypedTuple<String>> range(RedisKeyBuilder keyBuilder, long start, long end) {
         Set<ZSetOperations.TypedTuple<String>> result = null;
         try {
-            result= zSetOperations.rangeWithScores(keyBuilder.getKey(), start,  end);
-            if(result == null){
+            result = zSetOperations.rangeWithScores(keyBuilder.getKey(), start, end);
+            if (result == null) {
                 return null;
             }
         } catch (Exception e) {
@@ -123,8 +123,8 @@ public class RedisZsetOperations{
         Set<String> result = null;
         Set<T> v = null;
         try {
-            result= zSetOperations.reverseRange(keyBuilder.getKey(), start,  end);
-            if(result == null){
+            result = zSetOperations.reverseRange(keyBuilder.getKey(), start, end);
+            if (result == null) {
                 return null;
             }
             v = result.stream().map(s -> SerializeUtils.string2Value(s, aClass)).collect(Collectors.toSet());
@@ -138,8 +138,8 @@ public class RedisZsetOperations{
         Set<String> result = null;
         Set<T> v = null;
         try {
-            result= zSetOperations.reverseRangeByScore(keyBuilder.getKey(), min,  max);
-            if(result == null){
+            result = zSetOperations.reverseRangeByScore(keyBuilder.getKey(), min, max);
+            if (result == null) {
                 return null;
             }
             v = result.stream().map(s -> SerializeUtils.string2Value(s, aClass)).collect(Collectors.toSet());
@@ -152,8 +152,8 @@ public class RedisZsetOperations{
     public Set<ZSetOperations.TypedTuple<String>> reverseRangeWithScores(RedisKeyBuilder keyBuilder, long start, long end) {
         Set<ZSetOperations.TypedTuple<String>> result = null;
         try {
-            result= zSetOperations.reverseRangeWithScores(keyBuilder.getKey(), start,  end);
-            if(result == null){
+            result = zSetOperations.reverseRangeWithScores(keyBuilder.getKey(), start, end);
+            if (result == null) {
                 return null;
             }
         } catch (Exception e) {
@@ -166,7 +166,7 @@ public class RedisZsetOperations{
         Long result = null;
         try {
             String value = SerializeUtils.value2String(o);
-            result= zSetOperations.rank(keyBuilder.getKey(), value);
+            result = zSetOperations.rank(keyBuilder.getKey(), value);
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }
@@ -177,7 +177,7 @@ public class RedisZsetOperations{
         Long result = null;
         try {
             String value = SerializeUtils.value2String(o);
-            result= zSetOperations.reverseRank(keyBuilder.getKey(),value);
+            result = zSetOperations.reverseRank(keyBuilder.getKey(), value);
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }
@@ -187,7 +187,7 @@ public class RedisZsetOperations{
     public Long count(RedisKeyBuilder keyBuilder, double min, double max) {
         Long result = null;
         try {
-            result= zSetOperations.count(keyBuilder.getKey(), min, max);
+            result = zSetOperations.count(keyBuilder.getKey(), min, max);
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }
@@ -197,7 +197,7 @@ public class RedisZsetOperations{
     public Long size(RedisKeyBuilder keyBuilder) {
         Long result = null;
         try {
-            result= zSetOperations.size(keyBuilder.getKey());
+            result = zSetOperations.size(keyBuilder.getKey());
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }
@@ -208,7 +208,7 @@ public class RedisZsetOperations{
         Double result = null;
         try {
             String value = SerializeUtils.value2String(o);
-            result= zSetOperations.score(keyBuilder.getKey(), value);
+            result = zSetOperations.score(keyBuilder.getKey(), value);
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }
@@ -218,7 +218,7 @@ public class RedisZsetOperations{
     public Long unionAndStore(RedisKeyBuilder keyBuilder, Collection<String> otherKeys, String destKey) {
         Long result = null;
         try {
-            result= zSetOperations.unionAndStore(keyBuilder.getKey(), otherKeys, destKey);
+            result = zSetOperations.unionAndStore(keyBuilder.getKey(), otherKeys, destKey);
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }
@@ -228,7 +228,7 @@ public class RedisZsetOperations{
     public Long unionAndStore(RedisKeyBuilder keyBuilder, String otherKey, String destKey) {
         Long result = null;
         try {
-            result= zSetOperations.unionAndStore(keyBuilder.getKey(), otherKey, destKey);
+            result = zSetOperations.unionAndStore(keyBuilder.getKey(), otherKey, destKey);
         } catch (Exception e) {
             logger.warn("RedisUtil set error, key is {}, e is {}", keyBuilder.getKey(), e);
         }
@@ -238,7 +238,7 @@ public class RedisZsetOperations{
     public Long unionAndStoreByMax(RedisKeyBuilder keyBuilder, Collection<String> otherKeys, String destKey) {
         Long result = null;
         try {
-            result= zSetOperations.unionAndStore(keyBuilder.getKey(), otherKeys, destKey , RedisZSetCommands.Aggregate.MAX,
+            result = zSetOperations.unionAndStore(keyBuilder.getKey(), otherKeys, destKey, RedisZSetCommands.Aggregate.MAX,
                     RedisZSetCommands.Weights.of(1)
             );
         } catch (Exception e) {

@@ -49,31 +49,59 @@ public class PagerInfo<T> {
         this.pageSize = pageSize;
     }
 
-    public int getCode() { return code; }
+    public int getCode() {
+        return code;
+    }
 
-    public void setCode(int code) { this.code = code; }
+    public void setCode(int code) {
+        this.code = code;
+    }
 
-    public int getPageNum() { return pageNum; }
+    public int getPageNum() {
+        return pageNum;
+    }
 
-    public void setPageNum(int pageNum) { this.pageNum = pageNum; }
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
 
-    public int getPageSize() { return pageSize; }
+    public int getPageSize() {
+        return pageSize;
+    }
 
-    public void setPageSize(int pageSize) { this.pageSize = pageSize; }
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 
-    public int getTotal() { return total; }
+    public int getTotal() {
+        return total;
+    }
 
-    public void setTotal(int total) { this.total = total; }
+    public void setTotal(int total) {
+        this.total = total;
+    }
 
-    public int getPages() { return pages; }
+    public int getPages() {
+        return pages;
+    }
 
-    public void setPages(int pages) { this.pages = pages; }
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
 
-    public List<T> getList() { return list; }
+    public List<T> getList() {
+        return list;
+    }
 
-    public void setList(List<T> list) { this.list = list; }
+    public void setList(List<T> list) {
+        this.list = list;
+    }
 
-    public String getTotalMapperId() { return totalMapperId; }
+    public String getTotalMapperId() {
+        return totalMapperId;
+    }
 
-    public void setTotalMapperId(String totalMapperId) { this.totalMapperId = totalMapperId; }
+    public void setTotalMapperId(String totalMapperId) {
+        this.totalMapperId = totalMapperId;
+    }
 }

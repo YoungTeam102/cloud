@@ -17,10 +17,11 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
+
 /**
  * webclient异常处理，下面的情况认为是出错了：
  * 1. 调用服务返回不是200 ，响应头中有一个自定义的:x-service-error-code, ，则抛出 {@link IGNBException}
- *  2.调用服务返回不是200 ,响应头中没有x-service-error-code 则抛出 {@link HttpClientErrorException} 或者 {@link HttpServerErrorException}
+ * 2.调用服务返回不是200 ,响应头中没有x-service-error-code 则抛出 {@link HttpClientErrorException} 或者 {@link HttpServerErrorException}
  */
 public class WebClientErrorHandler {
     private static final Logger log = LoggerFactory.getLogger(WebClientErrorHandler.class);
@@ -28,59 +29,57 @@ public class WebClientErrorHandler {
     private ClientResponse response;
 
 
-
-
-    public static  <T> Mono<T> handleError(ClientResponse response)  {
+    public static <T> Mono<T> handleError(ClientResponse response) {
         HttpStatus statusCode = getHttpStatusCode(response);
         assert statusCode != null;
         switch (statusCode.series()) {
-            case CLIENT_ERROR:{
-                if(getServiceErrorCode(response) > 0){
-                    IGNBException se =  new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
-                    log.info("service call with service exception: {}",  se.getMessage());
-                    throw  se;
+            case CLIENT_ERROR: {
+                if (getServiceErrorCode(response) > 0) {
+                    IGNBException se = new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
+                    log.info("service call with service exception: {}", se.getMessage());
+                    throw se;
                 }
                 HttpClientErrorException ex = new HttpClientErrorException(statusCode, response.statusCode().getReasonPhrase(),
                         response.headers().asHttpHeaders(), getResponseBody(response), getCharset(response));
-                log.error("service call client error",  ex);
+                log.error("service call client error", ex);
                 throw ex;
             }
 
             case SERVER_ERROR: {
-                if(getServiceErrorCode(response) > 0){
-                    IGNBException se =  new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
-                    log.info("service call with service exception: {}",  se.getMessage());
-                    throw  se;
+                if (getServiceErrorCode(response) > 0) {
+                    IGNBException se = new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
+                    log.info("service call with service exception: {}", se.getMessage());
+                    throw se;
                 }
                 HttpServerErrorException ex = new HttpServerErrorException(statusCode, response.statusCode().getReasonPhrase(),
                         response.headers().asHttpHeaders(), getResponseBody(response), getCharset(response));
-                log.error("service call server error",  ex);
+                log.error("service call server error", ex);
                 throw ex;
             }
 
             default: {
-                IGNBException se =  new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
-                log.info("service call with service exception: {}",  se.getMessage());
-                throw  se;
+                IGNBException se = new IGNBException(getServiceErrorCode(response), getServiceErrorMessage(response));
+                log.info("service call with service exception: {}", se.getMessage());
+                throw se;
             }
         }
 
     }
 
-    private static  int getServiceErrorCode(ClientResponse response){
-        List<String> header =  response.headers().header(IGNBGlobalExceptionHandler.HEADER_ERROR_CODE);
-        if(header.size()>0 ){
+    private static int getServiceErrorCode(ClientResponse response) {
+        List<String> header = response.headers().header(IGNBGlobalExceptionHandler.HEADER_ERROR_CODE);
+        if (header.size() > 0) {
             return Integer.parseInt(header.get(0));
         }
         return 0;
     }
 
 
-    private static String getServiceErrorMessage(ClientResponse response){
-        List<String> header =  response.headers().header(IGNBGlobalExceptionHandler.HEADER_ERROR_MESSAGE);
-        if(header.size()>0 ){
+    private static String getServiceErrorMessage(ClientResponse response) {
+        List<String> header = response.headers().header(IGNBGlobalExceptionHandler.HEADER_ERROR_MESSAGE);
+        if (header.size() > 0) {
             try {
-                return new String(header.get(0).getBytes("ISO8859-1"),"UTF-8");
+                return new String(header.get(0).getBytes("ISO8859-1"), "UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -89,7 +88,7 @@ public class WebClientErrorHandler {
     }
 
 
-    private static HttpStatus getHttpStatusCode(ClientResponse response)   {
+    private static HttpStatus getHttpStatusCode(ClientResponse response) {
         HttpStatus statusCode;
         statusCode = response.statusCode();
         return statusCode;
