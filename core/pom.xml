@@ -66,6 +66,7 @@
         <module>common</module>
         <module>mybatis</module>
         <module>zipkin</module>
+        <module>aysnc</module>
     </modules>
 
 </project>
