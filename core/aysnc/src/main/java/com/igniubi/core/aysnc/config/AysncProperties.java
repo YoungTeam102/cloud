@@ -3,10 +3,6 @@ package com.igniubi.core.aysnc.config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author lvyahui (lvyahui8@gmail.com,lvyahui8@126.com)
- * @since 2019/5/31 23:50
- */
 @ConfigurationProperties(prefix = "igniubi.aysnc.spring")
 @Data
 public class AysncProperties {

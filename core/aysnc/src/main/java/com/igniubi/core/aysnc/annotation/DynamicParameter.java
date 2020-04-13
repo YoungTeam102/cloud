@@ -2,10 +2,6 @@ package com.igniubi.core.aysnc.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * @author lvyahui (lvyahui8@gmail.com,lvyahui8@126.com)
- * @since 2019/11/6 23:22
- */
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
