@@ -22,6 +22,7 @@ public class RedisZsetOperations {
     private static final Logger logger = LoggerFactory.getLogger(RedisZsetOperations.class);
 
     private final RedisTemplate<String, String> redisTemplate;
+
     private ZSetOperations<String, String> zSetOperations;
 
     @Autowired
