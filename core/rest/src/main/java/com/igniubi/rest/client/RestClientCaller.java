@@ -17,42 +17,41 @@ public class RestClientCaller implements IRestClient {
     @Override
     public <T> T post(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
-        T t = clientUtil.postEntity(url, request, responseType);
-        return t;
+        return clientUtil.postEntity(url, request, responseType);
     }
 
     @Override
     public <T> T call(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         Mono<T> mono = clientUtil.post(url, request, responseType);
-        return new AsyncResult<T>(mono.toFuture(), url).get();
+        return new AsyncResult<>(mono.toFuture(), url).get();
     }
 
     @Override
     public <T> T call(String serviceName, String serviceUrl, Object request, Class<T> responseType, int timeout) {
         String url = serviceName + serviceUrl;
         Mono<T> mono = clientUtil.post(url, request, responseType);
-        return new AsyncResult<T>(mono.toFuture(), url).get(timeout, TimeUnit.SECONDS);
+        return new AsyncResult<>(mono.toFuture(), url).get(timeout, TimeUnit.SECONDS);
     }
 
     @Override
     public <T> T get(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         Mono<T> mono = clientUtil.get(url, request, responseType);
-        return new AsyncResult<T>(mono.toFuture(), url).get();
+        return new AsyncResult<>(mono.toFuture(), url).get();
     }
 
     @Override
     public <T> AsyncResult<T> asyncCall(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         Mono<T> mono = clientUtil.post(url, request, responseType);
-        return new AsyncResult<T>(mono.toFuture(), url);
+        return new AsyncResult<>(mono.toFuture(), url);
     }
 
     @Override
     public <T> AsyncResult<T> asyncGet(String serviceName, String serviceUrl, Object request, Class<T> responseType) {
         String url = serviceName + serviceUrl;
         Mono<T> mono = clientUtil.get(url, request, responseType);
-        return new AsyncResult<T>(mono.toFuture(), url);
+        return new AsyncResult<>(mono.toFuture(), url);
     }
 }
